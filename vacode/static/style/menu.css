@@ -1,0 +1,33 @@
+.menu{
+    background-color: #212e41;
+    color:#525151;
+    border-color: dimgray;
+    border-width: 1px;
+    border-style: solid;
+    display:flex;
+    align-content: space-around;
+    flex-flow: column wrap;
+    height:100%;
+    width:50px;
+    position:fixed;
+    top:36px;
+    left: 0;
+}
+.menu span{
+    background-color: #212e41;
+    color:#d6d6d6;
+    display:block;
+    height:30px;
+    width:48px;
+    border-color:#5c7190;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: small;
+}
+
+.menu span:hover{
+    background-color: #2c3e50;
+}
