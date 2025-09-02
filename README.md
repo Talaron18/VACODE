@@ -10,29 +10,3 @@ electron
 html+css+ts
 ## 开发工具：
 VScode
-window
-  -*userpage
-  -*basic tools
-      -*file-open-new
-	  -edit
-	  -view
-      -window
-	  -help
-	  -*terminal-select-new
-	  -*run_and_debug
-  -*menu
-	  -*docs_block_1
-		  -*project_block_1
-			  -file_1
-		  	  -...
-		  -*...
-	  -*...
-  -*copilot
-  -(*extensions)
-  -*editor & listen
-  -*TEXT_editor
-    -*file_name_blocks
-	  -file_name_1
-	  -...
-     -*file_editor
-	  -*terminal_block
