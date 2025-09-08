@@ -1,0 +1,26 @@
+{
+  "name": "vacode",
+  "version": "1.0.0",
+  "description": "summer project",
+  "main": "main.js",
+  "scripts": {
+    "start": "npm run build && electron ./dist/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "author": "Hong Weijun",
+  "license": "ISC",
+  "devDependencies": {
+    "@electron/rebuild": "^3.7.2",
+    "electron": "^37.4.0"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-web-links": "^0.11.0",
+    "@xterm/xterm": "^5.3.0",
+    "node-pty": "^1.0.0",
+    "python": "^0.0.4",
+    "typescript": "^5.9.2"
+  }
+}

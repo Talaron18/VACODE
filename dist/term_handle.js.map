@@ -1,0 +1,1 @@
+{"version":3,"file":"term_handle.js","sourceRoot":"","sources":["../src/term_handle.ts"],"names":[],"mappings":";;AACA,kCAKC;AALD,SAAgB,WAAW,CAAC,IAAa;IACrC,MAAM,SAAS,GAAC,IAAI,CAAC,YAAY,EAAE,CAAC;IACpC,IAAG,SAAS,CAAC,QAAQ,EAAE,EAAC,CAAC;QACrB,SAAS,CAAC,SAAS,CAAC,SAAS,CAAC,SAAS,CAAC,QAAQ,EAAE,CAAC,CAAC;IACxD,CAAC;AACL,CAAC"}

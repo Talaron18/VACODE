@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self';script-src 'self'"
+        />
+        <title>VACode</title>
+        <link rel="stylesheet" href="static/style/titlebar.css"/>
+        <link rel="stylesheet" href="static/style/menu.css"/>
+        <script>var exports = {};</script>
+        <link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css" />
+    </head>
+    <body>
+        <div class="titlebar">
+                <span id="title_file">file</span>
+                <span id="title_edit">edit</span>
+                <span id="title_view">view</span>
+                <span id="ter">terminal</span>
+                <span id="title_help">help</span>
+        </div>
+        <div class="root">
+            <div class="menu">
+                <span id="project">project</span>
+                <span id='runAndDebug'>run</span>
+            </div>
+            <div class="content">
+                <div class="edit-term-container">
+                    <div id="edit-window">
+                        <p>content</p>
+                    </div>
+                    <div id="term_container">
+                        <div id="term_header">
+                            <p>Terminal</p>
+                        </div>
+                        <div id="terminal"></div>
+                    </div>
+                    <script src="dist/terminal.js" type="module"></script>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
