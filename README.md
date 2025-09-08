@@ -1,6 +1,6 @@
 # IDE Project-VACODE
 ## Function
-C语言编译+同词查找/修改+关键字高亮+报错机制+（自动填充/AI辅助）
+multi-language compilation and run
 ## Language
 typescript+ntml/xml+css+(python)
 ### Framework
