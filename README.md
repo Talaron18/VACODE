@@ -5,8 +5,7 @@ multi-language compilation and run
 typescript+ntml/xml+css+(python)
 ### Framework
 electron
-- 
-bundler:Webpack
+  - bundler:webpack
 ### Frontend
 html+css+ts
 ## Development Tool
