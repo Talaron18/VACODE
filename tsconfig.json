@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2020",
+    "types":["node"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "strict": true,
+    "isolatedModules": true,
+    "outDir": "./dist", 
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
+  },
+  "include": [
+    "src/main.ts",
+    "src/preload.ts",
+    "src/global.d.ts",
+    "declarations.d.ts",
+    "src/ipc-handlers.ts",
+    "src/file-operations.ts",
+    "src/ai-init.ts",
+    "src/file-type-utils.ts",
+    "src/menu-handlers.ts",
+    "src/menu.ts",
+    "src/project-manager.ts"
+  ],
+}

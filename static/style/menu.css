@@ -1,0 +1,125 @@
+.menu{
+    background-color: #212e41;
+    color:#525151;
+    border-color: dimgray;
+    border-width: 1px;
+    border-style: solid;
+    display:flex;
+    align-content: space-around;
+    flex-flow: column wrap;
+    height:100%;
+    width:60px;
+    position:fixed;
+    top:36px;
+    left: 0;
+    z-index: 1000;
+}
+.menu span{
+    background-color: #212e41;
+    color:#d6d6d6;
+    display:block;
+    height:30px;
+    width:58px;
+    border-color:#5c7190;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: small;
+}
+
+.menu span:hover{
+    background-color: #2c3e50;
+}
+
+.edit-term-container{
+    display:flex;
+    flex-direction:column;
+    position:absolute;
+    height: 100%;
+    width:100%;
+    margin:2px;
+    align-content: space-around;
+    bottom: 0;
+    background-color: #00000985;
+    overflow-y: scroll;
+}
+
+#term_container{
+    height:43%;
+    display:flex;
+    flex-direction:column;
+    width:calc(100% - 60px);
+    left:60px;
+    bottom:1px;
+    position:fixed;
+    margin-bottom: 0;
+    box-sizing: border-box;
+}
+
+.content.shifted #term_container {
+    left: 320px; 
+    width: calc(100% - 320px);
+}
+
+#term_header{
+    height:20px;
+    flex:0 0 auto;
+    z-index:1;
+    cursor:ns-resize;
+    width:100%;
+    display:flex;
+    font-size: small;
+    background-color: rgb(0, 0, 0);
+    border-bottom: #525151 1px solid;
+}
+
+#term_header p{
+    position:absolute;
+    left:0;
+    display:inline-block;
+    font-size: small;
+    margin:0;
+    padding:0;
+}
+
+#terminal{
+    position: relative;
+    display: flex;
+    flex: 1;
+    background: #000000;
+    overflow: auto;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important; 
+}
+
+#terminal::-webkit-scrollbar {
+    display: none !important; 
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.hide-scrollbar {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+#terminal .xterm-viewport,
+#terminal .xterm {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+#terminal .xterm-viewport::-webkit-scrollbar,
+#terminal .xterm::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}

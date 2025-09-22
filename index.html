@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self';script-src 'self'"
+        />
+        <title>VACode</title>
+        <link rel="stylesheet" href="static/style/titlebar.css"/>
+        <link rel="stylesheet" href="static/style/menu.css"/>
+        <link rel="stylesheet" href="static/style/explorer.css"/>
+        <link rel="stylesheet" href="static/style/dropdown.css"/>
+        <link rel="stylesheet" href="static/style/menu-dynamic.css"/>
+        <link rel="stylesheet" href="static/font/iconfont.css"/>
+        <script>var exports = {};</script>
+        <link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css" />
+    </head>
+    <body>
+        <div class="titlebar">
+                <span id="title_file">file</span>
+                <span id="title_edit">edit</span>
+                <span id="title_view">view</span>
+                <span id="ter">terminal</span>
+                <span id="title_help">help</span>
+        </div>
+        <div class="root">
+            <div class="menu">
+                <span id="explorer">project</span>
+                <span id='runAndDebug'>run</span>
+                <span id="ai-trigger">AI</span>
+            </div>
+            <div class="content">
+                <div class="edit-term-container">
+                    <div id="edit-window"></div>
+                    <div id="term_container">
+                        <div id="term_header">
+                            <p>Terminal</p>
+                        </div>
+                        <div id="terminal"></div>
+                    </div>
+                    <script src="dist/renderer.js" type="module"></script>
+                </div>
+            </div>
+        </div>
+        <div id="file-dropdown" class="dropdown-menu">
+    <div class="menu-item">
+        <span class="menu-text">New File</span>
+        <span class="menu-shortcut">Ctrl+N</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">New Window</span>
+        <span class="menu-shortcut">Ctrl+Shift+N</span>
+    </div>
+    <div class="menu-separator"></div>
+    <div class="menu-item">
+        <span class="menu-text">Open File...</span>
+        <span class="menu-shortcut">Ctrl+O</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">Open Folder...</span>
+        <span class="menu-shortcut">Ctrl+K Ctrl+O</span>
+    </div>
+    <div class="menu-separator"></div>
+    <div class="menu-item">
+        <span class="menu-text">Save</span>
+        <span class="menu-shortcut">Ctrl+S</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">Save As...</span>
+        <span class="menu-shortcut">Ctrl+Shift+S</span>
+    </div>
+    <div class="menu-separator"></div>
+    <div class="menu-item">
+        <span class="menu-text">Exit</span>
+    </div>
+</div>
+<div id="edit-dropdown" class="dropdown-menu">
+    <div class="menu-item">
+        <span class="menu-text">Undo</span>
+        <span class="menu-shortcut">Ctrl+Z</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">Redo</span>
+        <span class="menu-shortcut">Ctrl+Y</span>
+    </div>
+    <div class="menu-separator"></div>
+    <div class="menu-item">
+        <span class="menu-text">Cut</span>
+        <span class="menu-shortcut">Ctrl+X</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">Copy</span>
+        <span class="menu-shortcut">Ctrl+C</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">Paste</span>
+        <span class="menu-shortcut">Ctrl+V</span>
+    </div>
+</div>
+
+<!-- Help Menu Dropdown -->
+<div id="help-dropdown" class="dropdown-menu">
+    <div class="menu-item">
+        <span class="menu-text">Electron</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">xterm.js</span>
+    </div>
+    <div class="menu-item">
+        <span class="menu-text">Instruction</span>
+    </div>
+</div>
+
+<!-- Explorer Panel -->
+<div id="explorer-panel" class="explorer-panel">
+    <div class="explorer-header">
+        <div class="explorer-title">文件</div>
+        <div class="explorer-actions">
+            <button class="explorer-btn" id="new-file-btn" title="新建文件">＋FILE</button>
+            <button class="explorer-btn" id="new-folder-btn" title="新建文件夹">＋FOLDER</button>
+        </div>
+    </div>
+    <div class="explorer-content">
+        <!-- 初始可以为空或放占位 -->
+    </div>
+    <div class="resize-handle" id="explorer-resize-handle"></div>
+</div>
+
+
+<!-- AI Panel -->
+<div id="ai-panel" class="ai-panel">
+    <div class="ai-header">
+        <div class="ai-title">AI Assistant</div>
+        <div class="ai-header-buttons">
+            <button class="ai-clear-btn" id="ai-clear-btn" title="Clear Chat">🗑️</button>
+            <button class="ai-close-btn" id="ai-close-btn" title="Close AI Assistant">×</button>
+        </div>
+    </div>
+    <div class="ai-content">
+        <div class="chat-area" id="ai-chatArea">
+            <div class="ai-message">
+                Hello! I am the AI Assistant. How can I assist you today?
+            </div>
+        </div>
+        <div class="ai-input-area">
+            <textarea id="ai-messageInput" placeholder="Enter your question..." rows="3"></textarea>
+            <button id="ai-sendBtn">Send</button>
+        </div>
+    </div>
+    <div class="resize-handle" id="ai-resize-handle"></div>
+</div>
+
+    </body>
+</html>

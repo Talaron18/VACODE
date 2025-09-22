@@ -1,0 +1,558 @@
+.explorer-panel{
+    position: fixed;
+    top: 36px; /* below titlebar */
+    left: 60px; /* right of vertical menu bar */
+    width: 260px;
+    height: calc(100% - 36px);
+    background-color: #252526;
+    border-right: 1px solid #2a2a2a;
+    box-shadow: 1px 0 6px rgba(0,0,0,0.25);
+    display: none; /* hidden by default */
+    flex-direction: column;
+    z-index: 900;
+    /* 确保面板内容可以正确滚动 */
+    overflow: hidden;
+}
+
+.explorer-panel.show{
+    display: flex;
+}
+
+.explorer-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    height: 38px;
+    border-bottom: 1px solid #2a2a2a;
+    color: #e0e0e0;
+    background-color: #2a2a2a;
+}
+
+.explorer-title{
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.explorer-actions{
+    display: flex;
+    gap: 6px;
+}
+
+.explorer-btn{
+    background: #2d2d2d;
+    color: #d6d6d6;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.explorer-btn:hover{
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+}
+
+.explorer-content{
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 10px;
+    color: #d6d6d6;
+    font-size: 12px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    /* 优化滚动体验 */
+    scroll-behavior: smooth;
+    /* 确保内容区域可以完全滚动 */
+    flex: 1;
+    min-height: 0;
+}
+
+.explorer-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* 添加悬停时的滚动提示效果 */
+.explorer-content:hover {
+    /* 悬停时可以添加一些视觉反馈 */
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* 优化文件/文件夹项的滚动体验 */
+.explorer-content .file-item,
+.explorer-content .folder-item {
+    /* 确保项目项可以正确显示和滚动 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 添加焦点状态，支持键盘导航 */
+.explorer-content:focus {
+    outline: none;
+}
+
+/* 确保滚动区域有足够的触摸目标 */
+.explorer-content {
+    /* 增加触摸滚动区域 */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Shift content area when explorer is visible */
+
+/* add smooth shift and correct spacing so content doesn't overlap */
+.content { transition: margin-left .1s ease; overflow: auto; padding-bottom: 12px; box-sizing: border-box; }
+.content.resizing { transition: none; } /* 拖动时禁用过渡效果 */
+/* .content.shifted margin-left is set dynamically via JS to match panel width */
+
+/* Resize handle at right edge of explorer */
+.resize-handle{
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 6px;
+    height: 100%;
+    cursor: ew-resize;
+    background: transparent;
+}
+.resize-handle:hover{
+    background: rgba(255,255,255,0.05);
+}
+
+/* AI Panel styles */
+.ai-panel{
+    position: fixed;
+    top: 36px; /* below titlebar */
+    left: 60px; /* right of vertical menu bar - same position as explorer */
+    width: 260px;
+    height: calc(100% - 36px);
+    background-color: #252526;
+    border-right: 1px solid #2a2a2a;
+    box-shadow: 1px 0 6px rgba(0,0,0,0.25);
+    display: none; /* hidden by default */
+    flex-direction: column;
+    z-index: 900;
+}
+
+.ai-panel.show{
+    display: flex;
+}
+
+.ai-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    height: 38px;
+    border-bottom: 1px solid #2a2a2a;
+    color: #e0e0e0;
+    background-color: #2a2a2a;
+}
+
+.ai-title{
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.ai-header-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.ai-clear-btn, .ai-close-btn{
+    background: transparent;
+    color: #d6d6d6;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-clear-btn:hover, .ai-close-btn:hover{
+    background: #3a3a3a;
+    color: #ffffff;
+}
+
+.ai-content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ai-content .chat-area{
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 15px;
+    color: #d6d6d6;
+    font-size: 13px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.ai-content .chat-area::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.ai-message{
+    background: #2d2d2d;
+    margin-bottom: 16px;
+    margin-right: 20px;
+    margin-left: 0;
+    padding: 12px 16px;
+    border-radius: 12px 12px 12px 4px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-width: 85%;
+    word-wrap: break-word;
+    line-height: 1.6;
+}
+
+.ai-message::before {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: -6px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-right-color: #2d2d2d;
+    border-bottom: none;
+    border-left: none;
+}
+
+.ai-message p {
+    margin: 0 0 8px 0;
+    padding: 0;
+}
+
+.ai-message p:last-child {
+    margin-bottom: 0;
+}
+
+.ai-message br {
+    line-height: 1.6;
+}
+
+/* Markdown渲染样式 */
+.ai-message h1, .ai-message h2, .ai-message h3, .ai-message h4, .ai-message h5, .ai-message h6 {
+    color: #ffffff;
+    margin: 16px 0 8px 0;
+    font-weight: 600;
+}
+
+.ai-message h1 { font-size: 1.5em; }
+.ai-message h2 { font-size: 1.3em; }
+.ai-message h3 { font-size: 1.2em; }
+.ai-message h4 { font-size: 1.1em; }
+.ai-message h5 { font-size: 1.05em; }
+.ai-message h6 { font-size: 1em; }
+
+.ai-message code {
+    background: #1a1a1a;
+    color: #f8f8f2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.ai-message pre {
+    background: #1a1a1a;
+    color: #f8f8f2;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 8px 0;
+    border: 1px solid #333;
+}
+
+.ai-message pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.ai-message blockquote {
+    border-left: 4px solid #4a9eff;
+    margin: 8px 0;
+    padding: 8px 16px;
+    background: #1a1a1a;
+    border-radius: 0 4px 4px 0;
+}
+
+.ai-message ul, .ai-message ol {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.ai-message li {
+    margin: 4px 0;
+}
+
+.ai-message table {
+    border-collapse: collapse;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.ai-message th, .ai-message td {
+    border: 1px solid #444;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.ai-message th {
+    background: #333;
+    font-weight: 600;
+}
+
+.ai-message a {
+    color: #4a9eff;
+    text-decoration: none;
+}
+
+.ai-message a:hover {
+    text-decoration: underline;
+}
+
+.ai-message strong {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.ai-message em {
+    font-style: italic;
+}
+
+.ai-message hr {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 16px 0;
+}
+
+.user-message{
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    color: white;
+    margin-left: 20px;
+    margin-right: 0;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 12px 12px 4px 12px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+    position: relative;
+    max-width: 85%;
+    word-wrap: break-word;
+    line-height: 1.6;
+}
+
+.user-message::before {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    right: -6px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-left-color: #1976D2;
+    border-bottom: none;
+    border-right: none;
+}
+
+.user-message p {
+    margin: 8px 0;
+    color: white;
+}
+
+.user-message p:last-child {
+    margin-bottom: 0;
+}
+
+.user-message:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+    transition: all 0.2s ease;
+}
+
+.ai-message:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+/* 消息出现动画 */
+.user-message, .ai-message {
+    animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 流式消息的特殊样式 */
+.ai-message.streaming {
+    animation: none;
+}
+
+.ai-message.streaming::after {
+    content: '|';
+    color: #007acc;
+    animation: blink 1s infinite;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.ai-input-area{
+    padding: 15px;
+    border-top: 1px solid #2a2a2a;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ai-input-area textarea{
+    background: #2d2d2d;
+    color: #d6d6d6;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    padding: 10px;
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.ai-input-area textarea:focus{
+    outline: none;
+    border-color: #007acc;
+    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.ai-input-area textarea::placeholder{
+    color: #888;
+}
+
+.ai-input-area button{
+    background: #007acc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.ai-input-area button:hover{
+    background: #005a9e;
+}
+
+.ai-input-area button:disabled{
+    background: #3a3a3a;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.loading{
+    color: #888;
+    font-style: italic;
+}
+
+.streaming{
+    position: relative;
+}
+
+.streaming::after{
+    content: '|';
+    color: #007acc;
+    animation: blink 1s infinite;
+    font-weight: bold;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Inline Input Styles for File/Folder Creation */
+.inline-input-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 4px;
+    margin: 1px 0;
+    border-radius: 3px;
+    background: transparent;
+    position: relative;
+    padding-left: 20px; /* Default indentation for root level */
+}
+
+.inline-input-container .file-icon {
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #cccccc;
+    flex-shrink: 0;
+}
+
+.inline-input-container .inline-input {
+    background: #1e1e1e;
+    color: #d6d6d6;
+    border: 1px solid #007acc;
+    border-radius: 2px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+    flex: 1;
+    min-width: 0;
+    box-shadow: 0 0 0 1px rgba(0, 122, 204, 0.3);
+}
+
+.inline-input-container .inline-input:focus {
+    border-color: #007acc;
+    box-shadow: 0 0 0 1px rgba(0, 122, 204, 0.5);
+}
+
+.inline-input-container .inline-input::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+/* Animation for inline input appearance */
+.inline-input-container {
+    animation: inlineInputSlideIn 0.15s ease-out;
+}
+
+@keyframes inlineInputSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
