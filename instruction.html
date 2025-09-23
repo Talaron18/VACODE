@@ -5,10 +5,10 @@
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
         <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'">
         <title>Instruction</title>
+        <link rel="stylesheet" href="static/style/instruction.css"/>
     </head>
     <body>
-        <h2>Instruction</h2>
-        <p>Welcome to VACODE</p>
+        <h2>Welcome to VACODE</h2>
         <hr>
         <h3>System Requirements</h3>
         <p>
@@ -16,6 +16,27 @@
             -- C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe<br>
             -- mingw64 (to compile C/C++ code)
         </p>
-        <small>Note:the mingw64 has to be installed in the following directory: C:\mingw64</small>
+        <p id="note">Note:the mingw64 has to be installed in the following directory: C:\mingw64</small>
+        <hr>
+        <h3>User Guide</h3>
+        <p>
+            1.File operations: Click on the "File" button to create or open files or floders.<br>
+        </p>
+        <p id="note">
+            Note: the default directory of created file or folder is C:\Users\YourUserName\Desktop.<br>
+            on creating a new file or folder in the default directory, you may not see it in the <br>
+            explorer. Please click the "open file" or "open folder" button to open it.
+        </p>
+        <p>
+            2.Code editor: Click on the file you want to edit to open the code editor.<br>
+            3.Terminal: the integrated terminal is automatically opened when you open this application.<br>
+        </p>
+        <small>*the working directory of the terminal is C:\Users\YourUserName. You need to manually <br>
+            change it to the directory you want to work in with the "cd" command.
+        </small>
+        <p>4.Run: the code you opened is interpreted as the code you want to run. Click the "Run" button on the left to compile and run.</p>
+        <p id="note">Note: the run button currently only supports Python/C/C++ code.</p>
+        <p>5.AI: click the "AI" button on the left to open the AI assistant. You can ask questions about coding and get answers from the AI.</p>
+        <small>*the AI assistant is powered by qwen3-8b(siliconflow) and may require a few minutes to return an answer.</small>
     </body>
 </html>

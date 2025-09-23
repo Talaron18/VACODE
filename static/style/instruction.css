@@ -1,0 +1,22 @@
+body,html{
+    line-height: 110%;
+}
+
+small{
+    color:blue;
+}
+
+#note{
+    font-size:smaller;
+    color:red;
+}
+p{
+    color:rgba(0, 0, 0, 0.795)
+}
+h2{
+    font-weight: bold;
+}
+h3{
+    font-weight:bold;
+}
+

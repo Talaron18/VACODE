@@ -58,15 +58,17 @@ export function createTerminal(container: HTMLElement){
         const contentArea = document.querySelector('.content') as HTMLElement;
         if (contentArea && term_container) {
             const contentMarginLeft = contentArea.style.marginLeft;
+            
             if (contentMarginLeft) {
                 // 解析margin-left值，提取数字部分
                 const marginValue = parseInt(contentMarginLeft);
-                term_container.style.left = marginValue + 'px';
+                
+                //term_container.style.left = marginValue + 'px';
                 term_container.style.width = `calc(100% - ${marginValue}px)`;
             } else {
                 // 默认位置
-                term_container.style.left = '60px';
-                term_container.style.width = 'calc(100% - 60px)';
+                //term_container.style.left = '60px';
+                term_container.style.width = 'calc(100% - 45px)';
             }
             // 立即调整终端尺寸，无延迟
             resizeTerminal();
@@ -93,6 +95,9 @@ export function createTerminal(container: HTMLElement){
         if(!isResizing) return;
         const newHeight = window.innerHeight - e.clientY;
         term_container.style.height = newHeight + "px";
+        let terminalHeight=term_container.style.height;
+        let terminalHeightValue=parseInt(terminalHeight);
+        edit_window.style.height=`calc(93% - ${terminalHeightValue}px)`;
     });
 
     window.addEventListener("mouseup", () => {
