@@ -22,10 +22,7 @@
     "declarations.d.ts",
     "src/ipc-handlers.ts",
     "src/file-operations.ts",
-    "src/ai-init.ts",
     "src/file-type-utils.ts",
-    "src/menu-handlers.ts",
-    "src/menu.ts",
     "src/project-manager.ts"
   ],
 }

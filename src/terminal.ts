@@ -65,10 +65,12 @@ export function createTerminal(container: HTMLElement){
                 
                 //term_container.style.left = marginValue + 'px';
                 term_container.style.width = `calc(100% - ${marginValue}px)`;
+                edit_window.style.width = `calc(100% - ${marginValue}px)`;
             } else {
                 // 默认位置
                 //term_container.style.left = '60px';
                 term_container.style.width = 'calc(100% - 45px)';
+                edit_window.style.width = 'calc(100% - 45px)';
             }
             // 立即调整终端尺寸，无延迟
             resizeTerminal();
