@@ -8,7 +8,7 @@ export function createTerminal(container: HTMLElement){
     const term_header = document.getElementById("term_header")!;
     const edit_window = document.getElementById("edit-window")!;
     const toggleBtn = document.getElementById('ter')!;
-    let isVisible = false;
+    let isVisible = true;
     const fitAddon = new FitAddon();
     
     const getTerminalTheme = () => {
