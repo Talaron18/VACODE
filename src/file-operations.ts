@@ -3,7 +3,6 @@ import * as path from 'path';
 import { ProjectManager } from './project-manager';
 import { FileTypeUtils, FileTypeInfo } from './file-type-utils';
 
-// 文件操作类 - 负责处理文件和文件夹的创建、读取、写入等操作
 export class FileOperations {
     private projectManager: ProjectManager;
 
@@ -11,7 +10,6 @@ export class FileOperations {
         this.projectManager = new ProjectManager();
     }
 
-    // 创建文件
     public async createFile(fileName: string, targetDir?: string): Promise<string> {
         const safeName = String(fileName || '').trim();
         if (!safeName) {
@@ -39,7 +37,6 @@ export class FileOperations {
         return target;
     }
 
-    // 创建文件夹
     public async createFolder(folderName: string, targetDir?: string): Promise<string> {
         const safeName = String(folderName || '').trim();
         if (!safeName) {
@@ -62,7 +59,6 @@ export class FileOperations {
         return finalPath;
     }
 
-    // 列出目录内容
     public async listDirectory(dirPath: string): Promise<Array<{name: string, type: string, path: string, fileType?: FileTypeInfo}>> {
         const safePath = String(dirPath || '').trim();
         if (!safePath) {
@@ -79,7 +75,6 @@ export class FileOperations {
                     path: itemPath
                 };
                 
-                // 如果是文件，添加文件类型信息
                 if (!e.isDirectory()) {
                     result.fileType = FileTypeUtils.getFileType(itemPath);
                 }

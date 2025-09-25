@@ -1,6 +1,4 @@
-/* Dynamic styles extracted from menu.ts */
 
-/* Section titles */
 .section-title {
     color: #cccccc;
     font-size: 11px;
@@ -9,14 +7,12 @@
     text-transform: uppercase;
 }
 
-/* Empty state */
 .empty-state {
     color: #888888;
     font-size: 12px;
     padding: 4px 12px;
 }
 
-/* Opened files item */
 .opened-file-item {
     display: flex;
     align-items: center;
@@ -36,7 +32,6 @@
     flex: 1;
 }
 
-/* Opened file icon */
 .opened-file-item .icon {
     display: inline-block;
     width: 16px;
@@ -47,7 +42,6 @@
     flex-shrink: 0;
 }
 
-/* Close button for opened files */
 .close-btn {
     display: none;
     position: absolute;
@@ -74,7 +68,6 @@
     display: flex;
 }
 
-/* Tree item styles */
 .tree-item {
     display: flex;
     align-items: center;
@@ -95,7 +88,6 @@
     border-radius: 3px;
 }
 
-/* Tree item arrow */
 .tree-arrow {
     width: 16px;
     height: 16px;
@@ -107,14 +99,12 @@
     cursor: pointer;
 }
 
-/* Tree item spacer for files */
 .tree-spacer {
     width: 16px;
     height: 16px;
     display: inline-block;
 }
 
-/* Tree item icon */
 .tree-icon {
     display: inline-block;
     width: 16px;
@@ -127,19 +117,16 @@
     line-height: 16px;
 }
 
-/* Tree item name */
 .tree-name {
     color: #d6d6d6;
     flex: 1;
 }
 
-/* Divider for sections */
 .section-divider {
     height: 8px;
     opacity: 0;
 }
 
-/* Inline input container */
 .inline-input-container {
     display: flex;
     align-items: center;
@@ -149,7 +136,7 @@
     border-radius: 3px;
     background: transparent;
     position: relative;
-    padding-left: 20px; /* Default indentation for root level */
+    padding-left: 20px;
 }
 
 .inline-input-container .file-icon {
@@ -187,7 +174,6 @@
     font-style: italic;
 }
 
-/* Animation for inline input appearance */
 .inline-input-container {
     animation: inlineInputSlideIn 0.15s ease-out;
 }
@@ -203,7 +189,6 @@
     }
 }
 
-/* Content area transitions */
 .content {
     transition: margin-left .1s ease;
     overflow: auto;
@@ -212,5 +197,5 @@
 }
 
 .content.resizing {
-    transition: none; /* Disable transitions during resizing */
+    transition: none;
 }

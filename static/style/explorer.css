@@ -1,16 +1,15 @@
 .explorer-panel{
     position: fixed;
-    top: 36px; /* below titlebar */
-    left: 60px; /* right of vertical menu bar */
-    width: 260px;
+    top: 36px;
+    left: 60px;
+    width: 200px;
     height: calc(100% - 36px);
     background-color: #252526;
     border-right: 1px solid #2a2a2a;
     box-shadow: 1px 0 6px rgba(0,0,0,0.25);
-    display: none; /* hidden by default */
+    display: none;    
     flex-direction: column;
     z-index: 900;
-    /* 确保面板内容可以正确滚动 */
     overflow: hidden;
 }
 
@@ -61,53 +60,41 @@
     padding: 8px 10px;
     color: #d6d6d6;
     font-size: 12px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    /* 优化滚动体验 */
+    scrollbar-width: none;    
+    -ms-overflow-style: none;    
     scroll-behavior: smooth;
-    /* 确保内容区域可以完全滚动 */
     flex: 1;
     min-height: 0;
 }
 
 .explorer-content::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
-/* 添加悬停时的滚动提示效果 */
 .explorer-content:hover {
-    /* 悬停时可以添加一些视觉反馈 */
     background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* 优化文件/文件夹项的滚动体验 */
 .explorer-content .file-item,
 .explorer-content .folder-item {
-    /* 确保项目项可以正确显示和滚动 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* 添加焦点状态，支持键盘导航 */
 .explorer-content:focus {
     outline: none;
 }
 
-/* 确保滚动区域有足够的触摸目标 */
 .explorer-content {
-    /* 增加触摸滚动区域 */
     -webkit-overflow-scrolling: touch;
 }
 
-/* Shift content area when explorer is visible */
 
-/* add smooth shift and correct spacing so content doesn't overlap */
-.content { transition: margin-left .1s ease; overflow: auto; padding-bottom: 12px; box-sizing: border-box; }
-.content.resizing { transition: none; } /* 拖动时禁用过渡效果 */
-/* .content.shifted margin-left is set dynamically via JS to match panel width */
+.content { transition: margin-left .1s ease; overflow: hidden; padding-bottom: 12px; box-sizing: border-box; }
+.content.resizing { transition: none; 
+}
 
-/* Resize handle at right edge of explorer */
 .resize-handle{
     position: absolute;
     top: 0;
@@ -121,17 +108,14 @@
     background: rgba(255,255,255,0.05);
 }
 
-/* AI Panel styles */
 .ai-panel{
     position: fixed;
-    top: 36px; /* below titlebar */
-    left: 60px; /* right of vertical menu bar - same position as explorer */
-    width: 260px;
+    top: 36px;    left: 60px;    width: 200px;
     height: calc(100% - 36px);
     background-color: #252526;
     border-right: 1px solid #2a2a2a;
     box-shadow: 1px 0 6px rgba(0,0,0,0.25);
-    display: none; /* hidden by default */
+    display: none;    
     flex-direction: column;
     z-index: 900;
 }
@@ -194,13 +178,12 @@
     padding: 20px 15px;
     color: #d6d6d6;
     font-size: 13px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;    
+    -ms-overflow-style: none;
 }
 
 .ai-content .chat-area::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
+    display: none;}
 
 .ai-message{
     background: #2d2d2d;
@@ -243,7 +226,6 @@
     line-height: 1.6;
 }
 
-/* Markdown渲染样式 */
 .ai-message h1, .ai-message h2, .ai-message h3, .ai-message h4, .ai-message h5, .ai-message h6 {
     color: #ffffff;
     margin: 16px 0 8px 0;
@@ -390,7 +372,6 @@
     transition: all 0.2s ease;
 }
 
-/* 消息出现动画 */
 .user-message, .ai-message {
     animation: messageSlideIn 0.3s ease-out;
 }
@@ -406,7 +387,6 @@
     }
 }
 
-/* 流式消息的特殊样式 */
 .ai-message.streaming {
     animation: none;
 }
@@ -493,7 +473,6 @@
     51%, 100% { opacity: 0; }
 }
 
-/* Inline Input Styles for File/Folder Creation */
 .inline-input-container {
     display: flex;
     align-items: center;
@@ -503,7 +482,7 @@
     border-radius: 3px;
     background: transparent;
     position: relative;
-    padding-left: 20px; /* Default indentation for root level */
+    padding-left: 20px;
 }
 
 .inline-input-container .file-icon {
@@ -541,7 +520,6 @@
     font-style: italic;
 }
 
-/* Animation for inline input appearance */
 .inline-input-container {
     animation: inlineInputSlideIn 0.15s ease-out;
 }

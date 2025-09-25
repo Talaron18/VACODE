@@ -1,0 +1,412 @@
+.theme-light .root {
+    background-color: #f1f3f4;
+    color: #2c3e50;
+}
+
+.theme-light .titlebar {
+    background-color: #f5f5f5;
+    color: #495057;
+    border-color: #e0e0e0;
+    border-bottom: 2px solid #dadce0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .titlebar span {
+    background-color: #f5f5f5;
+    color: #495057;
+    border-color: #f5f5f5;
+}
+
+.theme-light .titlebar span:hover {
+    background-color: #e8eaed;
+}
+
+.theme-light .content {
+    background-color: #f8f9fa;
+}
+
+.theme-light #edit-window {
+    background-color: #fafafa;
+    border-top: 1px solid #dadce0;
+}
+
+.theme-light .menu {
+    background-color: #e8eaed;
+    color: #5f6368;
+    border-color: #dadce0;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .menu span {
+    background-color: #e8eaed;
+    color: #5f6368;
+    border-color: #dadce0;
+}
+
+.theme-light .menu span:hover {
+    background-color: #f1f3f4;
+}
+
+.theme-light .edit-term-container {
+    background-color: #f8f9fa;
+}
+
+.theme-light #term_container {
+    background-color: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+}
+
+.theme-light #term_header {
+    background-color: #e8eaed;
+    border-bottom: #dadce0 1px solid;
+    color: #5f6368;
+}
+
+.theme-light #terminal {
+    background: #ffffff;
+}
+
+.theme-light .dropdown-menu {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .menu-item:hover {
+    background-color: #f8f9fa;
+}
+
+.theme-light .menu-shortcut {
+    color: #6c757d;
+}
+
+.theme-light .menu-separator {
+    background-color: #dee2e6;
+}
+
+.theme-light .explorer-panel {
+    background-color: #f5f5f5;
+    border-right: 1px solid #dadce0;
+    box-shadow: 1px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .explorer-header {
+    border-bottom: 1px solid #dadce0;
+    color: #5f6368;
+    background-color: #e8eaed;
+}
+
+.theme-light .explorer-content {
+    color: #495057;
+}
+
+.theme-light .explorer-content:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.theme-light .tree-item {
+    color: #495057;
+}
+
+.theme-light .tree-item:hover {
+    background: #e8eaed;
+}
+
+.theme-light .tree-item.selected {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    color: #1976d2;
+}
+
+.theme-light .tree-name {
+    color: #495057;
+}
+
+.theme-light .tree-icon {
+    color: #5f6368;
+}
+
+.theme-light .tree-arrow {
+    color: #5f6368;
+}
+
+.theme-light .section-title {
+    color: #5f6368;
+}
+
+.theme-light .empty-state {
+    color: #6c757d;
+}
+
+.theme-light .inline-input-container .file-icon {
+    color: #5f6368;
+}
+
+.theme-light .inline-input-container .inline-input {
+    background: #ffffff;
+    color: #495057;
+    border: 1px solid #2196f3;
+    box-shadow: 0 0 0 1px rgba(33, 150, 243, 0.3);
+}
+
+.theme-light .inline-input-container .inline-input:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 1px rgba(33, 150, 243, 0.5);
+}
+
+.theme-light .inline-input-container .inline-input::placeholder {
+    color: #6c757d;
+}
+
+.theme-light .close-btn {
+    color: #5f6368;
+}
+
+.theme-light .close-btn:hover {
+    background: #e81123;
+    color: white;
+}
+
+.theme-light .explorer-btn {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.theme-light .explorer-btn:hover {
+    background: #e9ecef;
+    border-color: #ced4da;
+}
+
+.theme-light .ai-panel {
+    background-color: #f5f5f5;
+    border-right: 1px solid #dadce0;
+    box-shadow: 1px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .ai-header {
+    border-bottom: 1px solid #dadce0;
+    color: #5f6368;
+    background-color: #e8eaed;
+}
+
+.theme-light .ai-clear-btn, 
+.theme-light .ai-close-btn {
+    color: #495057;
+}
+
+.theme-light .ai-clear-btn:hover, 
+.theme-light .ai-close-btn:hover {
+    background: #e9ecef;
+    color: #212529;
+}
+
+.theme-light .ai-content .chat-area {
+    color: #495057;
+}
+
+.theme-light .ai-message {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #495057;
+}
+
+.theme-light .ai-message::before {
+    border-right-color: #f8f9fa;
+}
+
+.theme-light .ai-message h1, 
+.theme-light .ai-message h2, 
+.theme-light .ai-message h3, 
+.theme-light .ai-message h4, 
+.theme-light .ai-message h5, 
+.theme-light .ai-message h6 {
+    color: #212529;
+}
+
+.theme-light .ai-message code {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.theme-light .ai-message pre {
+    background: #e9ecef;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.theme-light .ai-message blockquote {
+    border-left: 4px solid #007bff;
+    background: #f8f9fa;
+}
+
+.theme-light .ai-message table {
+    border-collapse: collapse;
+}
+
+.theme-light .ai-message th, 
+.theme-light .ai-message td {
+    border: 1px solid #dee2e6;
+}
+
+.theme-light .ai-message th {
+    background: #f8f9fa;
+}
+
+.theme-light .ai-message a {
+    color: #007bff;
+}
+
+.theme-light .ai-message strong {
+    color: #212529;
+}
+
+.theme-light .ai-message hr {
+    border-top: 1px solid #dee2e6;
+}
+
+.theme-light .user-message {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.theme-light .user-message::before {
+    border-left-color: #0056b3;
+}
+
+.theme-light .ai-input-area {
+    border-top: 1px solid #dee2e6;
+}
+
+.theme-light .ai-input-area textarea {
+    background: #ffffff;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.theme-light .ai-input-area textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.theme-light .ai-input-area textarea::placeholder {
+    color: #6c757d;
+}
+
+.theme-light .ai-input-area button {
+    background: #007bff;
+    color: white;
+}
+
+.theme-light .ai-input-area button:hover {
+    background: #0056b3;
+}
+
+.theme-light .ai-input-area button:disabled {
+    background: #e9ecef;
+    color: #6c757d;
+}
+
+.theme-light .inline-input-container .file-icon {
+    color: #6c757d;
+}
+
+.theme-light .inline-input-container .inline-input {
+    background: #ffffff;
+    color: #495057;
+    border: 1px solid #007bff;
+    box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.3);
+}
+
+.theme-light .inline-input-container .inline-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.5);
+}
+
+.theme-light .inline-input-container .inline-input::placeholder {
+    color: #6c757d;
+}
+
+.theme-light .resize-handle:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.theme-light .edit-term-container {
+    background-color: #f8f9fa !important;
+}
+
+.theme-light #term_header {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+}
+
+.theme-light #terminal {
+    background: #ffffff !important;
+}
+
+.theme-light #editor-head {
+    background-color: #e8eaed !important;
+}
+
+.theme-light #editor-head-title {
+    color: #5f6368 !important;
+}
+
+.theme-light #editor-close-btn {
+    color: #5f6368 !important;
+    border-right: 1px solid #dadce050 !important;
+}
+
+.theme-light #monaco-editor-container {
+    border-top: 1px solid #dadce0 !important;
+}
+
+.theme-light * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.theme-light .titlebar-controls {
+    -webkit-app-region: no-drag;
+}
+
+.theme-light .titlebar {
+    background-color: #f5f5f5 !important;
+    border-bottom: 2px solid #dadce0 !important;
+}
+
+.theme-light .titlebar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 140px;
+    height: 100%;
+    background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.theme-light {
+    --titlebar-controls-color: #5f6368;
+    --titlebar-controls-hover-color: #e81123;
+}
+
+.theme-light .root::-webkit-scrollbar,
+.theme-light .content::-webkit-scrollbar,
+.theme-light #edit-window::-webkit-scrollbar,
+.theme-light .edit-term-container::-webkit-scrollbar,
+.theme-light .explorer-content::-webkit-scrollbar,
+.theme-light .ai-content .chat-area::-webkit-scrollbar {
+    display: none;
+}
+
+.theme-light .root,
+.theme-light .content,
+.theme-light #edit-window,
+.theme-light .edit-term-container,
+.theme-light .explorer-content,
+.theme-light .ai-content .chat-area {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}

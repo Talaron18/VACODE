@@ -11,22 +11,26 @@ export function createTerminal(container: HTMLElement){
     let isVisible = false;
     const fitAddon = new FitAddon();
     
+    const getTerminalTheme = () => {
+        const isLight = document.body.classList.contains('theme-light');
+        return {
+            background: isLight ? '#ffffff' : '#000000',
+            foreground: isLight ? '#000000' : '#ffffff'
+        };
+    };
+
     let term = new Terminal({
         cursorBlink: true,
         fontSize: 16,
         fontFamily: 'Consolas, "Courier New", monospace',
-        scrollback: 1000, // 增加滚动缓冲区
-        allowTransparency: false, // 禁用透明度
-        theme: {
-            background: '#000000',
-            foreground: '#ffffff'
-        }
+        scrollback: 1000,
+        allowTransparency: false,
+        theme: getTerminalTheme()
     });
     
     term.loadAddon(fitAddon);
     term.open(container);
     
-    // 初始化终端
     const initTerminal = () => {
         fitAddon.fit();
         const dim = fitAddon.proposeDimensions();
@@ -35,7 +39,10 @@ export function createTerminal(container: HTMLElement){
         }
     };
     
-    requestAnimationFrame(initTerminal);
+    requestAnimationFrame(() => {
+        initTerminal();
+        adjustTerminalPosition();
+    });
 
     term.onData((data) => {
         (window as any).electronAPI.sendInput(data);
@@ -54,63 +61,83 @@ export function createTerminal(container: HTMLElement){
     };
 
 
-    const adjustTerminalPosition = () => {
+    const adjustTerminalPosition = (shouldResize = true) => {
         const contentArea = document.querySelector('.content') as HTMLElement;
+        const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+        
         if (contentArea && term_container) {
-            const contentMarginLeft = contentArea.style.marginLeft;
-            
-            if (contentMarginLeft) {
-                // 解析margin-left值，提取数字部分
-                const marginValue = parseInt(contentMarginLeft);
-                
-                //term_container.style.left = marginValue + 'px';
-                term_container.style.width = `calc(100% - ${marginValue}px)`;
-                edit_window.style.width = `calc(100% - ${marginValue}px + 15px)`;
-            } else {
-                // 默认位置
-                //term_container.style.left = '60px';
-                term_container.style.width = 'calc(100% - 45px)';
-                edit_window.style.width = 'calc(100% - 65px)';
+
+            const marginLeft = contentArea.style.marginLeft || '60px';
+            const marginValue = parseInt(marginLeft.replace('px', ''));
+ 
+            term_container.style.left = `${marginValue}px`;
+            term_container.style.width = `calc(100% - ${marginValue}px)`;
+            term_container.style.right = '0px';
+
+            if (editTermContainer) {
+                const currentWidth = editTermContainer.style.width;
+                if (!currentWidth || currentWidth === 'calc(100% - 4px)') {
+                    editTermContainer.style.width = `calc(100% - ${marginValue}px)`;
+                }
             }
-            // 立即调整终端尺寸，无延迟
-            resizeTerminal();
+            
+
+            if (shouldResize) {
+                resizeTerminal();
+            }
         }
     };
 
     (window as any).adjustTerminalPosition = adjustTerminalPosition;
 
-    // 窗口大小调整 - 使用防抖优化
     let resizeTimeout: NodeJS.Timeout;
     window.addEventListener("resize", () => {
         clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(resizeTerminal, 150);
+        resizeTimeout = setTimeout(() => {
+            resizeTerminal();
+            adjustTerminalPosition();
+        }, 100);
     });
 
-    // 拖拽调整终端高度
     let isResizing = false;
     term_header.addEventListener("mousedown", () => {
         isResizing = true;
         document.body.style.cursor = 'ns-resize';
+        document.body.style.userSelect = 'none';
+
+        const contentArea = document.querySelector('.content') as HTMLElement;
+        if (contentArea) {
+            contentArea.classList.add('resizing');
+        }
     });
 
     window.addEventListener("mousemove", (e) => {
         if(!isResizing) return;
-        const newHeight = window.innerHeight - e.clientY;
-        term_container.style.height = newHeight + "px";
-        let terminalHeight=term_container.style.height;
-        let terminalHeightValue=parseInt(terminalHeight);
-        edit_window.style.height=`calc(90% - ${terminalHeightValue}px)`;
+        const newHeight = window.innerHeight - e.clientY - 36;
+        const minHeight = 100; 
+        const maxHeight = window.innerHeight * 0.8; 
+        
+        const clampedHeight = Math.max(minHeight, Math.min(newHeight, maxHeight));
+        const heightPercent = (clampedHeight / (window.innerHeight - 36)) * 100;
+        
+        term_container.style.height = heightPercent + "%";
+        edit_window.style.height = (96 - heightPercent) + "%";
+        
     });
 
     window.addEventListener("mouseup", () => {
         if(isResizing){
             isResizing = false;
             document.body.style.cursor = 'default';
+            document.body.style.userSelect = '';
+            const contentArea = document.querySelector('.content') as HTMLElement;
+            if (contentArea) {
+                contentArea.classList.remove('resizing');
+            }
             resizeTerminal();
         }
     });
 
-    // 键盘快捷键
     term.attachCustomKeyEventHandler((event: KeyboardEvent) => {
         if(event.ctrlKey && event.key === 'c'){
             handleCtrlC(term);
@@ -125,12 +152,26 @@ export function createTerminal(container: HTMLElement){
     toggleBtn.addEventListener("click", () => {
         if(isVisible){
             term_container.style.display = 'none';
-            edit_window.style.height='100%'
+            edit_window.style.height='100%';
         }else{
             term_container.style.display = 'flex';
-            edit_window.style.height='55%';
+            edit_window.style.height='51%';
+            term_container.style.height='45%';
             resizeTerminal();
         }
         isVisible = !isVisible;
+    });
+
+    window.addEventListener('themeChanged', (event: Event) => {
+        const customEvent = event as CustomEvent;
+        const newTheme = customEvent.detail.theme;
+        const theme = newTheme === 'light' ? {
+            background: '#ffffff',
+            foreground: '#000000'
+        } : {
+            background: '#000000',
+            foreground: '#ffffff'
+        };
+        term.options.theme = theme;
     });
 }

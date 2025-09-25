@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="static/style/explorer.css"/>
         <link rel="stylesheet" href="static/style/dropdown.css"/>
         <link rel="stylesheet" href="static/style/menu-dynamic.css"/>
+        <link rel="stylesheet" href="static/style/theme-light.css"/>
         <link rel="stylesheet" href="static/font/iconfont.css"/>
         <script>var exports = {};</script>
         <link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css" />
@@ -100,7 +101,6 @@
     </div>
 </div>
 
-<!-- Help Menu Dropdown -->
 <div id="help-dropdown" class="dropdown-menu">
     <div class="menu-item">
         <span class="menu-text">Electron</span>
@@ -113,23 +113,20 @@
     </div>
 </div>
 
-<!-- Explorer Panel -->
 <div id="explorer-panel" class="explorer-panel">
     <div class="explorer-header">
-        <div class="explorer-title">文件</div>
+        <div class="explorer-title">Files</div>
         <div class="explorer-actions">
-            <button class="explorer-btn" id="new-file-btn" title="新建文件">＋FILE</button>
-            <button class="explorer-btn" id="new-folder-btn" title="新建文件夹">＋FOLDER</button>
+            <button class="explorer-btn" id="new-file-btn" title="New File">＋FILE</button>
+            <button class="explorer-btn" id="new-folder-btn" title="New Folder">＋FOLDER</button>
         </div>
     </div>
     <div class="explorer-content">
-        <!-- 初始可以为空或放占位 -->
     </div>
     <div class="resize-handle" id="explorer-resize-handle"></div>
 </div>
 
 
-<!-- AI Panel -->
 <div id="ai-panel" class="ai-panel">
     <div class="ai-header">
         <div class="ai-title">AI Assistant</div>

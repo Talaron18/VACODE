@@ -1,19 +1,18 @@
+import { themeManager } from './theme-manager';
+
 export class MenuManager {
-    // 状态变量
-    private currentInputType: 'file' | 'folder' | null = null; // 当前输入类型
-    private currentInputContainer: HTMLElement | null = null; // 当前输入容器
-    private currentInputElement: HTMLInputElement | null = null; // 当前输入元素
-    private selectedFolderPath: string | null = null; // 选中的文件夹路径
-    private selectedFolderElement: HTMLElement | null = null; // 选中的文件夹元素
-    private isRefreshing: boolean = false; // 是否正在刷新
+    private currentInputType: 'file' | 'folder' | null = null;
+    private currentInputContainer: HTMLElement | null = null;
+    private currentInputElement: HTMLInputElement | null = null;
+    private selectedFolderPath: string | null = null;
+    private selectedFolderElement: HTMLElement | null = null;
+    private isRefreshing: boolean = false;
 
-    // 文件树状态管理
-    private currentExplorerRoot: string | null = null; // 当前资源管理器根目录
-    private expandedFolders = new Set<string>(); // 已展开的文件夹集合
-    private folderStructure = new Map<string, any>(); // 文件夹结构缓存
-    private projectRootPath: string | null = null; // 项目根路径
+    private currentExplorerRoot: string | null = null;
+    private expandedFolders = new Set<string>();
+    private folderStructure = new Map<string, any>();
+    private projectRootPath: string | null = null;
 
-    // 获取DOM元素的函数
     private getExplorerElements() {
         return {
             explorerTrigger: document.getElementById('explorer') as HTMLElement,
@@ -26,7 +25,6 @@ export class MenuManager {
         };
     }
 
-    // 根据路径查找对应的DOM元素
     private findElementByPath(path: string): HTMLElement | null {
         let element = document.querySelector(`[data-path="${path}"]`) as HTMLElement;
         
@@ -49,7 +47,6 @@ export class MenuManager {
         return element;
     }
 
-    // 延迟恢复文件夹选择状态
     private restoreSelectionAfterDelay(currentSelected: string | null, delay: number = 500): void {
         if (currentSelected) {
             setTimeout(() => {
@@ -61,7 +58,6 @@ export class MenuManager {
         }
     }
 
-    // 包装异步操作，设置刷新标志
     private withRefreshingFlag<T>(operation: () => Promise<T>): Promise<T> {
         this.isRefreshing = true;
         return operation().finally(() => {
@@ -69,7 +65,6 @@ export class MenuManager {
         });
     }
 
-    // 设置选中的文件夹
     private setSelectedFolder(folderPath: string, element?: HTMLElement): void {
         if (this.selectedFolderElement) {
             this.selectedFolderElement.classList.remove('selected');
@@ -95,7 +90,6 @@ export class MenuManager {
         this.selectedFolderElement = null;
     }
 
-    // 创建内联输入框用于新建文件或文件夹
     private createInlineInput(type: 'file' | 'folder'): void {
         if (this.currentInputElement && this.currentInputElement.value.trim()) {
             this.currentInputElement.focus();
@@ -105,14 +99,11 @@ export class MenuManager {
         
         this.removeInlineInput();
         
-        // 根据选中的文件夹动态调整输入框位置
         let targetFolderElement: HTMLElement | null = null;
         
         if (this.selectedFolderPath && this.selectedFolderElement) {
-            // 如果有选中的子文件夹，使用选中的子文件夹
             targetFolderElement = this.selectedFolderElement;
         } else {
-            // 如果没有选中子文件夹，使用主文件夹
             targetFolderElement = document.querySelector('[data-level="0"]') as HTMLElement;
         }
         
@@ -128,7 +119,7 @@ export class MenuManager {
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'inline-input';
-        input.placeholder = type === 'file' ? '文件名' : '文件夹名';
+        input.placeholder = type === 'file' ? 'File name' : 'Folder name';
         input.autocomplete = 'off';
         input.spellcheck = false;
         
@@ -136,7 +127,6 @@ export class MenuManager {
         container.appendChild(input);
         
         if (targetFolderElement) {
-            // 确保目标文件夹是展开的
             const targetFolderPath = targetFolderElement.getAttribute('data-path');
             if (targetFolderPath && !this.expandedFolders.has(targetFolderPath)) {
                 this.expandedFolders.add(targetFolderPath);
@@ -148,7 +138,6 @@ export class MenuManager {
             
             const parent = targetFolderElement.parentElement;
             if (parent) {
-                // 将输入框插入到目标文件夹的下一个位置
                 const nextSibling = targetFolderElement.nextElementSibling;
                 if (nextSibling) {
                     parent.insertBefore(container, nextSibling);
@@ -157,12 +146,10 @@ export class MenuManager {
                 }
             }
             
-            // 设置输入框的缩进级别（目标文件夹的子级）
             const targetLevel = parseInt(targetFolderElement.getAttribute('data-level') || '0');
             const inputLevel = targetLevel + 1;
             container.style.paddingLeft = (4 + inputLevel * 16) + 'px';
         } else {
-            // 如果找不到目标文件夹元素，回退到原来的逻辑
             const sections = (window as any).ensureSections ? (window as any).ensureSections() : null;
             if (sections && sections.folderSection) {
                 sections.folderSection.insertBefore(container, sections.folderSection.firstChild);
@@ -222,14 +209,12 @@ export class MenuManager {
         }, 100);
     }
 
-    // 创建文件或文件夹
     private async createItem(name: string): Promise<void> {
         if (!this.currentInputType || !name.trim()) return;
         
         try {
             this.isRefreshing = true;
             
-            // 如果有选中的子文件夹，则在子文件夹中创建；否则在主文件夹中创建
             const menuAPI = (window as any).menuAPI;
             if (!menuAPI) {
                 throw new Error('Menu API not available');
@@ -249,15 +234,14 @@ export class MenuManager {
             }, 200);
             
         } catch(err) {
-            console.error(`创建${this.currentInputType === 'file' ? '文件' : '文件夹'}失败:`, err);
+            console.error(`Failed to create ${this.currentInputType === 'file' ? 'file' : 'folder'}:`, err);
             const errorMessage = err instanceof Error ? err.message : String(err);
-            alert(`创建${this.currentInputType === 'file' ? '文件' : '文件夹'}失败: ${errorMessage}`);
+            alert(`Failed to create ${this.currentInputType === 'file' ? 'file' : 'folder'}: ${errorMessage}`);
             this.isRefreshing = false;
         }
     }
 
 
-    // 创建文件树项目元素
     private createTreeItem(item: any, level: number = 0): HTMLElement {
         const row = document.createElement('div');
         row.className = 'tree-item';
@@ -266,7 +250,6 @@ export class MenuManager {
         row.setAttribute('data-path', item.path);
 
         if (item.type === 'dir') {
-            // 文件夹显示箭头
             const arrow = document.createElement('span');
             arrow.className = 'tree-arrow';
             
@@ -278,16 +261,16 @@ export class MenuManager {
             };
             row.appendChild(arrow);
         } else {
-            // 文件显示图标
             const icon = document.createElement('span');
             const iconClass = item.fileType ? item.fileType.iconclass : 'icon-txt';
-            const iconColor = item.fileType ? item.fileType.color : '#666666';
             const iconSize = item.fileType ? item.fileType.size : 'normal';
             
             icon.className = `tree-icon iconfont ${iconClass}`;
-            icon.style.color = iconColor;
             
-            // 根据 size 属性设置图标大小
+            const currentTheme = document.body.classList.contains('theme-light') ? 'light' : 'dark';
+            const themeColor = this.getIconColorForTheme(iconClass, currentTheme);
+            icon.style.color = themeColor || (item.fileType ? item.fileType.color : '#666666');
+            
             if (iconSize === 'small') {
                 icon.style.fontSize = '10px';
                 icon.style.width = '12px';
@@ -297,7 +280,6 @@ export class MenuManager {
                 icon.style.width = '20px';
                 icon.style.height = '20px';
             }
-            // normal 使用默认大小，不需要设置
             
             row.appendChild(icon);
         }
@@ -308,7 +290,6 @@ export class MenuManager {
         name.className = 'tree-name';
         row.appendChild(name);
 
-        // 添加鼠标悬停事件来动态改变id
         row.addEventListener('mouseenter', () => {
             if (item.type === 'file') {
                 name.id = 'file-editor';
@@ -339,7 +320,6 @@ export class MenuManager {
         return row;
     }
 
-    // 切换文件夹展开/折叠状态
     private async toggleFolder(folderPath: string, row: HTMLElement, level: number): Promise<void> {
         const isExpanded = this.expandedFolders.has(folderPath);
         const arrow = row.querySelector('span') as HTMLElement;
@@ -463,6 +443,10 @@ export class MenuManager {
                     }
                 }, 100);
             }
+            
+            setTimeout(() => {
+                themeManager.forceUpdateFileIconColors();
+            }, 200);
         } catch(err) { 
             console.error('Refresh root level failed:', err); 
         }
@@ -512,6 +496,10 @@ export class MenuManager {
             }
             
             this.restoreSelectionAfterDelay(currentSelected);
+            
+            setTimeout(() => {
+                themeManager.forceUpdateEditorTheme();
+            }, 100);
         }).catch(err => {
             console.error('Failed to refresh folder contents:', err);
         });
@@ -584,10 +572,8 @@ export class MenuManager {
         }
     }
 
-    // 自动展开项目文件夹
     private async expandProjectFolder(): Promise<void> {
         try {
-            // 确保项目根目录已渲染
             if (!this.projectRootPath) {
                 const menuAPI = (window as any).menuAPI;
                 if (menuAPI) {
@@ -595,12 +581,10 @@ export class MenuManager {
                 }
             }
             
-            // 查找主文件夹元素
             const mainFolderElement = document.querySelector('[data-level="0"]') as HTMLElement;
             if (mainFolderElement) {
                 const mainFolderPath = mainFolderElement.getAttribute('data-path');
                 if (mainFolderPath && !this.expandedFolders.has(mainFolderPath)) {
-                    // 展开主文件夹
                     const level = parseInt(mainFolderElement.getAttribute('data-level') || '0');
                     await this.expandFolderDirectly(mainFolderPath, mainFolderElement, level);
                 }
@@ -610,7 +594,6 @@ export class MenuManager {
         }
     }
 
-    // 渲染项目根目录
     private async renderProjectRoot(): Promise<void> {
         const sections = (window as any).ensureSections ? (window as any).ensureSections() : null;
         if (!sections) {
@@ -671,9 +654,7 @@ export class MenuManager {
         }
     }
 
-    // 初始化函数
     public initialize(): void {
-        // 等待DOM元素可用
         const checkAndInit = () => {
             const elements = this.getExplorerElements();
             
@@ -704,15 +685,26 @@ export class MenuManager {
                     elements.contentArea.classList.add('shifted');
                     const menuWidth = 50;
                     const panelWidth = elements.explorerPanel.getBoundingClientRect().width;
-                    elements.contentArea.style.marginLeft = (menuWidth + panelWidth + 10) + 'px';
+                    const newMarginLeft = menuWidth + panelWidth + 10;
+                    elements.contentArea.style.marginLeft = newMarginLeft + 'px';
+                    
+                    const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                    if (editTermContainer) {
+                        editTermContainer.style.width = `calc(100% - ${newMarginLeft}px)`;
+                    }
+                    
                     window.dispatchEvent(new CustomEvent('renderOpenedFiles'));
                     if (!elements.explorerContent.querySelector('#folder-section')) this.renderProjectRoot();
                 } else {
                     elements.contentArea.classList.remove('shifted');
                     elements.contentArea.style.marginLeft = '60px';
+                    
+                    const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                    if (editTermContainer) {
+                        editTermContainer.style.width = 'calc(100% - 60px)';
+                    }
                 }
                 
-                // 同步调整终端位置
                 if ((window as any).adjustTerminalPosition) {
                     (window as any).adjustTerminalPosition();
                 }
@@ -746,9 +738,14 @@ export class MenuManager {
                     if (newWidth > maxWidth) newWidth = maxWidth;
                     elements.explorerPanel.style.width = newWidth + 'px';
                     const menuWidth = 50;
-                    elements.contentArea.style.marginLeft = (menuWidth + newWidth + 10) + 'px';
+                    const newMarginLeft = menuWidth + newWidth + 10;
+                    elements.contentArea.style.marginLeft = newMarginLeft + 'px';
                     
-                    // 同步调整终端位置
+                    const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                    if (editTermContainer) {
+                        editTermContainer.style.width = `calc(100% - ${newMarginLeft}px)`;
+                    }
+                    
                     if ((window as any).adjustTerminalPosition) {
                         (window as any).adjustTerminalPosition();
                     }
@@ -761,27 +758,28 @@ export class MenuManager {
                     elements.contentArea.classList.remove('resizing');
                 });
 
-                // 窗口大小改变时自动调整Explorer面板宽度
                 window.addEventListener('resize', function() {
                     if (elements.explorerPanel && elements.contentArea) {
                         const currentWidth = elements.explorerPanel.getBoundingClientRect().width;
                         const maxWidth = Math.floor(window.innerWidth * 0.5);
                         
-                        // 如果当前宽度超过新的最大宽度，则缩小面板
                         if (currentWidth > maxWidth) {
-                            // 禁用过渡效果以避免延迟
                             elements.contentArea.classList.add('resizing');
                             
                             elements.explorerPanel.style.width = maxWidth + 'px';
                             const menuWidth = 50;
-                            elements.contentArea.style.marginLeft = (menuWidth + maxWidth + 10) + 'px';
+                            const newMarginLeft = menuWidth + maxWidth + 10;
+                            elements.contentArea.style.marginLeft = newMarginLeft + 'px';
                             
-                            // 同步调整终端位置
+                            const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                            if (editTermContainer) {
+                                editTermContainer.style.width = `calc(100% - ${newMarginLeft}px)`;
+                            }
+                            
                             if ((window as any).adjustTerminalPosition) {
                                 (window as any).adjustTerminalPosition();
                             }
                             
-                            // 短暂延迟后重新启用过渡效果
                             setTimeout(() => {
                                 elements.contentArea.classList.remove('resizing');
                             }, 10);
@@ -790,7 +788,6 @@ export class MenuManager {
                 });
             }
 
-            // 与 menu-handlers.ts 的通信事件监听器
             window.addEventListener('createInlineInput', (e: Event) => {
                 const customEvent = e as CustomEvent;
                 const { type } = customEvent.detail;
@@ -809,20 +806,51 @@ export class MenuManager {
             });
 
             window.addEventListener('expandProjectFolder', async () => {
-                // 自动展开项目文件夹
                 await this.expandProjectFolder();
             });
         } else {
-            // 如果DOM元素还没准备好，等待一下再试
             setTimeout(checkAndInit, 10);
         }
     };
     
     checkAndInit();
     }
+
+    private getIconColorForTheme(iconClass: string, theme: 'light' | 'dark'): string | null {
+        const lightThemeIconColors: Record<string, string> = {
+            'icon-lnk-f': '#5f6368',
+            'icon-txt': '#5f6368',
+            'icon-env': '#5f6368',
+            'icon-gitignore': '#5f6368',
+            'icon-dockerfile': '#5f6368',
+            'icon-RTF': '#5f6368',
+            'icon-ico': '#5f6368',
+            'icon-ttf': '#5f6368',
+            'icon-mysql': '#5f6368',
+        };
+
+        const darkThemeIconColors: Record<string, string> = {
+            'icon-lnk-f': '#ffffff',
+            'icon-txt': '#cccccc',
+            'icon-env': '#f0f0f0',
+            'icon-gitignore': '#3178c6',
+            'icon-dockerfile': '#2496ed',
+            'icon-RTF': '#cccccc',
+            'icon-ico': '#ff6b6b',
+            'icon-ttf': '#8b4513',
+            'icon-mysql': '#336791',
+        };
+
+        for (const [iconKey, color] of Object.entries(theme === 'light' ? lightThemeIconColors : darkThemeIconColors)) {
+            if (iconClass.includes(iconKey)) {
+                return color;
+            }
+        }
+
+        return null;
+    }
 }
 
-// 导出便捷函数
 export function initializeMenu(): MenuManager {
     const menuManager = new MenuManager();
     menuManager.initialize();

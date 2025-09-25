@@ -16,6 +16,7 @@ electron_1.contextBridge.exposeInMainWorld('menuAPI', {
     listDirectory: (folderPath) => electron_1.ipcRenderer.invoke('list-directory', folderPath),
     openFileDialog: () => electron_1.ipcRenderer.invoke('open-file-dialog'),
     openFolderDialog: () => electron_1.ipcRenderer.invoke('open-folder-dialog'),
+    saveFileDialog: (currentFilePath) => electron_1.ipcRenderer.invoke('save-file-dialog', currentFilePath),
     createNewWindow: () => electron_1.ipcRenderer.invoke('create-new-window'),
     closeWindow: () => electron_1.ipcRenderer.invoke('close-window'),
     getFileType: (filePath) => electron_1.ipcRenderer.invoke('get-file-type', filePath),

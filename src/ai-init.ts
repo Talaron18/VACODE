@@ -12,8 +12,6 @@ export class AIPanelManager {
     private contentArea: HTMLElement | null;
     private explorerPanel: HTMLElement | null;
     private chatHistory: ChatMessage[] = [];
-
-    // AI 聊天相关DOM元素
     private aiChatArea: HTMLElement | null;
     private aiMessageInput: HTMLTextAreaElement | null;
     private aiSendBtn: HTMLButtonElement | null;
@@ -27,7 +25,6 @@ export class AIPanelManager {
         this.contentArea = document.querySelector('.content') as HTMLElement;
         this.explorerPanel = document.getElementById('explorer-panel') as HTMLElement;
 
-        // AI 聊天相关DOM元素
         this.aiChatArea = document.getElementById('ai-chatArea') as HTMLElement;
         this.aiMessageInput = document.getElementById('ai-messageInput') as HTMLTextAreaElement;
         this.aiSendBtn = document.getElementById('ai-sendBtn') as HTMLButtonElement;
@@ -41,7 +38,6 @@ export class AIPanelManager {
     }
 
     private setupPanelHandlers(): void {
-        // AI 面板显示/隐藏
         if (this.aiTrigger && this.aiPanel && this.contentArea) {
             this.aiTrigger.addEventListener('click', (e: Event) => {
                 e.stopPropagation();
@@ -57,10 +53,25 @@ export class AIPanelManager {
                     this.contentArea!.classList.add('shifted');
                     const menuWidth = 50;
                     const panelWidth = this.aiPanel!.getBoundingClientRect().width;
-                    this.contentArea!.style.marginLeft = (menuWidth + panelWidth + 10) + 'px';
+                    const newMarginLeft = menuWidth + panelWidth + 10;
+                    this.contentArea!.style.marginLeft = newMarginLeft + 'px';
+                    
+                    const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                    if (editTermContainer) {
+                        editTermContainer.style.width = `calc(100% - ${newMarginLeft}px)`;
+                    }
                 } else {
                     this.contentArea!.classList.remove('shifted');
                     this.contentArea!.style.marginLeft = '60px';
+                    
+                    const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                    if (editTermContainer) {
+                        editTermContainer.style.width = 'calc(100% - 60px)';
+                    }
+                }
+                
+                if ((window as any).adjustTerminalPosition) {
+                    (window as any).adjustTerminalPosition();
                 }
                 
                 setTimeout(() => {
@@ -69,7 +80,6 @@ export class AIPanelManager {
             });
         }
 
-        // AI 面板关闭按钮
         if (this.aiCloseBtn && this.aiPanel && this.contentArea) {
             this.aiCloseBtn.addEventListener('click', (e: Event) => {
                 e.stopPropagation();
@@ -80,13 +90,21 @@ export class AIPanelManager {
                 this.contentArea!.classList.remove('shifted');
                 this.contentArea!.style.marginLeft = '60px';
                 
+                const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                if (editTermContainer) {
+                    editTermContainer.style.width = 'calc(100% - 64px)';
+                }
+                
+                if ((window as any).adjustTerminalPosition) {
+                    (window as any).adjustTerminalPosition();
+                }
+                
                 setTimeout(() => {
                     this.contentArea!.classList.remove('resizing');
                 }, 100);
             });
         }
 
-        // AI 面板大小调整
         this.setupResizeHandlers();
     }
 
@@ -98,7 +116,6 @@ export class AIPanelManager {
         let aiStartWidth: number = 0;
 
         const aiMinWidth = 180;
-        const aiMaxWidth = 560;
 
         this.aiResizeHandle.addEventListener('mousedown', (e: MouseEvent) => {
             isAiResizing = true;
@@ -112,11 +129,22 @@ export class AIPanelManager {
             if (!isAiResizing) return;
             const delta = e.clientX - aiStartX;
             let newWidth = aiStartWidth + delta;
+            const aiMaxWidth = Math.floor(window.innerWidth * 0.5);
             if (newWidth < aiMinWidth) newWidth = aiMinWidth;
             if (newWidth > aiMaxWidth) newWidth = aiMaxWidth;
             this.aiPanel!.style.width = newWidth + 'px';
             const menuWidth = 50;
-            this.contentArea!.style.marginLeft = (menuWidth + newWidth + 10) + 'px';
+            const newMarginLeft = menuWidth + newWidth + 10;
+            this.contentArea!.style.marginLeft = newMarginLeft + 'px';
+            
+            const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+            if (editTermContainer) {
+                editTermContainer.style.width = `calc(100% - ${newMarginLeft}px - 4px)`;
+            }
+            
+            if ((window as any).adjustTerminalPosition) {
+                (window as any).adjustTerminalPosition();
+            }
         });
 
         document.addEventListener('mouseup', () => {
@@ -124,6 +152,35 @@ export class AIPanelManager {
             isAiResizing = false;
             document.body.style.userSelect = '';
             this.contentArea!.classList.remove('resizing');
+        });
+
+        window.addEventListener('resize', () => {
+            if (this.aiPanel && this.contentArea) {
+                const currentWidth = this.aiPanel.getBoundingClientRect().width;
+                const maxWidth = Math.floor(window.innerWidth * 0.5);
+                
+                if (currentWidth > maxWidth) {
+                    this.contentArea.classList.add('resizing');
+                    
+                    this.aiPanel.style.width = maxWidth + 'px';
+                    const menuWidth = 50;
+                    const newMarginLeft = menuWidth + maxWidth + 10;
+                    this.contentArea.style.marginLeft = newMarginLeft + 'px';
+                    
+                    const editTermContainer = document.querySelector('.edit-term-container') as HTMLElement;
+                    if (editTermContainer) {
+                        editTermContainer.style.width = `calc(100% - ${newMarginLeft}px)`;
+                    }
+                    
+                    if ((window as any).adjustTerminalPosition) {
+                        (window as any).adjustTerminalPosition();
+                    }
+                    
+                    setTimeout(() => {
+                        this.contentArea!.classList.remove('resizing');
+                    }, 10);
+                }
+            }
         });
     }
 
@@ -160,7 +217,7 @@ export class AIPanelManager {
                         response: response
                     }, '*');
                 } catch (error) {
-                    console.error('AI服务错误:', error);
+                    console.error('AI service error:', error);
                     const errorMessage = error instanceof Error ? error.message : String(error);
                     (event.source as Window).postMessage({
                         type: 'ai-response',
@@ -172,25 +229,20 @@ export class AIPanelManager {
         });
     }
 
-    // 自定义 Markdown 渲染器
     private formatMessageContent(content: string): string {
         let html = content;
         
-        // 转义 HTML 特殊字符
         html = html.replace(/&/g, '&amp;')
                   .replace(/</g, '&lt;')
                   .replace(/>/g, '&gt;');
         
-        // 代码块 (``` 包围，支持语言标识)
         html = html.replace(/```(\w+)?\n?([\s\S]*?)```/g, (match, lang, code) => {
             const language = lang ? ` class="language-${lang}"` : '';
             return `<pre><code${language}>${code.trim()}</code></pre>`;
         });
         
-        // 行内代码 (` 包围)
         html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
         
-        // 标题 (支持 1-6 级)
         html = html.replace(/^#{6}\s+(.*$)/gm, '<h6>$1</h6>');
         html = html.replace(/^#{5}\s+(.*$)/gm, '<h5>$1</h5>');
         html = html.replace(/^#{4}\s+(.*$)/gm, '<h4>$1</h4>');
@@ -198,46 +250,35 @@ export class AIPanelManager {
         html = html.replace(/^#{2}\s+(.*$)/gm, '<h2>$1</h2>');
         html = html.replace(/^#{1}\s+(.*$)/gm, '<h1>$1</h1>');
         
-        // 水平分割线
         html = html.replace(/^[-*_]{3,}$/gm, '<hr>');
         
-        // 粗体 (** 或 __ 包围)
         html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
         html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>');
         
-        // 斜体 (* 或 _ 包围)
         html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
         html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
         
-        // 删除线 (~~ 包围)
         html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>');
         
-        // 链接 ([文本](URL "标题"))
         html = html.replace(/\[([^\]]+)\]\(([^)]+)(?:\s+"([^"]*)")?\)/g, (match, text, url, title) => {
             const titleAttr = title ? ` title="${title}"` : '';
             return `<a href="${url}" target="_blank"${titleAttr}>${text}</a>`;
         });
         
-        // 自动链接 (http/https/ftp)
         html = html.replace(/(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g, '<a href="$1" target="_blank">$1</a>');
         
-        // 图片 (![alt](src "title"))
         html = html.replace(/!\[([^\]]*)\]\(([^)]+)(?:\s+"([^"]*)")?\)/g, (match, alt, src, title) => {
             const titleAttr = title ? ` title="${title}"` : '';
             return `<img src="${src}" alt="${alt}"${titleAttr} style="max-width: 100%; height: auto;">`;
         });
         
-        // 引用 (> 开头)
         html = html.replace(/^>\s*(.*$)/gm, '<blockquote>$1</blockquote>');
         
-        // 无序列表 (- * + 开头)
         html = html.replace(/^[\s]*[-*+]\s+(.*$)/gm, '<li>$1</li>');
         html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
         
-        // 有序列表 (数字. 开头)
         html = html.replace(/^[\s]*\d+\.\s+(.*$)/gm, '<li>$1</li>');
         
-        // 表格 (简单支持)
         html = html.replace(/\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.+\|\n?)*)/g, (match, header, rows) => {
             const headerCells = header.split('|').map((cell: string) => `<th>${cell.trim()}</th>`).join('');
             const rowLines = rows.trim().split('\n');
@@ -248,11 +289,9 @@ export class AIPanelManager {
             return `<table><thead><tr>${headerCells}</tr></thead><tbody>${tableRows}</tbody></table>`;
         });
         
-        // 换行处理
         html = html.replace(/\n\n/g, '</p><p>');
         html = html.replace(/\n/g, '<br>');
         
-        // 包装段落
         if (!html.startsWith('<')) {
             html = '<p>' + html + '</p>';
         }
@@ -260,7 +299,6 @@ export class AIPanelManager {
         return html;
     }
 
-    // 添加AI消息到聊天区域
     private addAIMessage(content: string, isUser: boolean = false): void {
         if (!this.aiChatArea) return;
         
@@ -302,7 +340,6 @@ export class AIPanelManager {
         }
     }
 
-    // 发送AI消息
     private async sendAIMessage(): Promise<void> {
         if (!this.aiMessageInput || !this.aiSendBtn) return;
         
@@ -316,7 +353,7 @@ export class AIPanelManager {
         
         const loadingDiv = document.createElement('div');
         loadingDiv.className = 'ai-message loading';
-        loadingDiv.textContent = 'Client is processing your request...';
+        loadingDiv.textContent = 'AI is thinking...';
         this.aiChatArea!.appendChild(loadingDiv);
         this.aiChatArea!.scrollTop = this.aiChatArea!.scrollHeight;
         
@@ -328,7 +365,6 @@ export class AIPanelManager {
             
                     const aiAPI = (window as any).aiAPI;
             
-            // 确保只传递可序列化的数据
             const serializableHistory = this.chatHistory.map(msg => ({
                 role: msg.role,
                 content: msg.content,
@@ -336,11 +372,9 @@ export class AIPanelManager {
             }));
             
             if (aiAPI && aiAPI.chatStream) {
-                // 使用流式调用
                 const response = await aiAPI.chatStream(message, serializableHistory);
                 fullResponse = response;
                 
-                // 实现打字机效果
                 const words = fullResponse.split('');
                 let currentText = '';
                 for (let i = 0; i < words.length; i++) {
@@ -349,7 +383,6 @@ export class AIPanelManager {
                     await new Promise(resolve => setTimeout(resolve, 10));
                 }
             } else {
-                // 降级到普通调用
                 const response = await aiAPI.chat(message, serializableHistory);
                 fullResponse = response;
                 this.updateStreamingMessage(streamingMessageDiv!, fullResponse);
@@ -361,11 +394,11 @@ export class AIPanelManager {
             
         } catch (error) {
             loadingDiv.remove();
-            const errorMessage = error instanceof Error ? error.message : '未知错误';
-            this.addAIMessage('AI服务错误: ' + errorMessage);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            this.addAIMessage('AI service error: ' + errorMessage);
         } finally {
             this.aiSendBtn.disabled = false;
-            this.aiSendBtn.textContent = '发送';
+            this.aiSendBtn.textContent = 'Send';
             this.aiMessageInput.focus();
         }
     }
@@ -376,7 +409,7 @@ export class AIPanelManager {
         if (this.aiChatArea) {
             this.aiChatArea.innerHTML = `
                 <div class="ai-message">
-                    你好！我是AI助手，有什么可以帮助你的吗？
+                    Hello! I am the AI Assistant. How can I assist you today?
                 </div>
             `;
             this.aiChatArea.scrollTop = 0;
@@ -393,7 +426,6 @@ export class AIPanelManager {
 
 }
 
-// 导出便捷函数
 export function initializeAIPanel(): AIPanelManager {
     const aiPanelManager = new AIPanelManager();
     aiPanelManager.initialize();

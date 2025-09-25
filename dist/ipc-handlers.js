@@ -5,7 +5,6 @@ const electron_1 = require("electron");
 const file_operations_1 = require("./file-operations");
 const project_manager_1 = require("./project-manager");
 const ai_service_1 = require("./ai-service");
-// IPC 处理器模块 - 负责处理主进程与渲染进程之间的通信
 class IpcHandlers {
     constructor() {
         this.fileOperations = new file_operations_1.FileOperations();
@@ -13,16 +12,13 @@ class IpcHandlers {
         this.aiService = new ai_service_1.AIService();
         this.registerHandlers();
     }
-    // 注册所有 IPC 处理器
     registerHandlers() {
-        // 文件操作处理器
         electron_1.ipcMain.handle('create-file', async (_event, fileName, targetDir) => {
             return this.fileOperations.createFile(fileName, targetDir);
         });
         electron_1.ipcMain.handle('create-folder', async (_event, folderName, targetDir) => {
             return this.fileOperations.createFolder(folderName, targetDir);
         });
-        // 项目管理处理器
         electron_1.ipcMain.handle('get-project-root', async () => {
             return this.projectManager.getBaseProjectDir();
         });
@@ -32,12 +28,10 @@ class IpcHandlers {
         electron_1.ipcMain.handle('list-directory', async (_event, dirPath) => {
             return this.fileOperations.listDirectory(dirPath);
         });
-        // 获取单个文件的类型信息
         electron_1.ipcMain.handle('get-file-type', async (_event, filePath) => {
             const { FileTypeUtils } = require('./file-type-utils');
             return FileTypeUtils.getFileType(filePath);
         });
-        // 对话框处理器
         electron_1.ipcMain.handle('open-file-dialog', async () => {
             const res = await electron_1.dialog.showOpenDialog({
                 properties: ['openFile']
@@ -50,22 +44,38 @@ class IpcHandlers {
             });
             return res.canceled ? null : res.filePaths;
         });
-        // 文件读写处理器
+        electron_1.ipcMain.handle('save-file-dialog', async (_event, currentFilePath) => {
+            const res = await electron_1.dialog.showSaveDialog({
+                properties: ['createDirectory'],
+                defaultPath: currentFilePath ? currentFilePath.replace(/\\/g, '/') : undefined,
+                filters: [
+                    { name: 'All Files', extensions: ['*'] },
+                    { name: 'C Files', extensions: ['c'] },
+                    { name: 'C++ Files', extensions: ['cpp', 'cc', 'cxx'] },
+                    { name: 'JavaScript', extensions: ['js'] },
+                    { name: 'TypeScript', extensions: ['ts'] },
+                    { name: 'Python', extensions: ['py'] },
+                    { name: 'HTML', extensions: ['html', 'htm'] },
+                    { name: 'CSS', extensions: ['css'] },
+                    { name: 'JSON', extensions: ['json'] },
+                    { name: 'Markdown', extensions: ['md'] },
+                    { name: 'Text Files', extensions: ['txt'] }
+                ]
+            });
+            return res.canceled ? null : res.filePath || null;
+        });
         electron_1.ipcMain.handle('read-file', async (_event, filePath) => {
             return this.fileOperations.readFile(filePath);
         });
         electron_1.ipcMain.handle('write-file', async (_event, filePath, content) => {
             this.fileOperations.writeFile(filePath, content);
         });
-        // 文件存在性检查处理器
         electron_1.ipcMain.handle('file-exists', async (_event, filePath) => {
             return this.fileOperations.exists(filePath);
         });
-        // AI聊天处理器
         electron_1.ipcMain.handle('ai-chat', async (_event, message, chatHistory = []) => {
             return this.aiService.chat(message, chatHistory);
         });
-        // AI流式聊天处理器
         electron_1.ipcMain.handle('ai-chat-stream', async (event, messageId, message, chatHistory = []) => {
             try {
                 for await (const chunk of this.aiService.chatStream(message, chatHistory)) {
@@ -78,29 +88,25 @@ class IpcHandlers {
                 event.sender.send('ai-stream-error', messageId, errorMessage);
             }
         });
-        // 显示输入对话框处理器
         electron_1.ipcMain.handle('show-prompt', async (_event, title, message) => {
             const { dialog } = require('electron');
             const result = await dialog.showMessageBox({
                 type: 'question',
-                buttons: ['确定', '取消'],
+                buttons: ['OK', 'Cancel'],
                 defaultId: 0,
                 title: title,
                 message: message,
-                detail: '请输入你的问题'
+                detail: 'Please enter your question'
             });
             if (result.response === 0) {
-                // 用户点击了确定，返回一个简单的输入
-                return '你好，请介绍一下你自己';
+                return 'Hello, please introduce yourself';
             }
             return null;
         });
-        // 创建新窗口处理器
         electron_1.ipcMain.handle('create-new-window', async () => {
-            // 创建新窗口功能已移除
-            console.log('Create new window functionality removed');
+            const { createWindow } = require('./main');
+            createWindow();
         });
-        // 关闭窗口处理器
         electron_1.ipcMain.handle('close-window', async (event) => {
             const window = electron_1.BrowserWindow.fromWebContents(event.sender);
             if (window) {
@@ -108,7 +114,6 @@ class IpcHandlers {
             }
         });
     }
-    // 移除所有 IPC 处理器
     removeHandlers() {
         const handlers = [
             'create-file',
@@ -119,6 +124,7 @@ class IpcHandlers {
             'get-file-type',
             'open-file-dialog',
             'open-folder-dialog',
+            'save-file-dialog',
             'read-file',
             'write-file',
             'file-exists',

@@ -38,29 +38,35 @@
     flex-direction:column;
     position:absolute;
     height: 100%;
-    width:100%;
-    margin:2px;
+    width: 100%;
+    margin: 0;
     align-content: space-around;
     bottom: 0;
     background-color: #00000985;
-    overflow-y: scroll;
+    overflow: hidden;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.edit-term-container::-webkit-scrollbar {
+    display: none;
 }
 
 #term_container{
-    height:43%;
+    height:45%;
     display:flex;
     flex-direction:column;
-    width:calc(100% - 50px);
     bottom:1px;
     position:fixed;
     margin-bottom: 0;
     box-sizing: border-box;
+    min-height: 100px;
+    max-height: 80%;
+    /* 宽度、左边距和右边距由JavaScript动态控制 */
 }
 
-.content.shifted #term_container {
-    /*left: 320px; */
-    width: calc(100% - 300px);
-}
+/* 终端宽度现在由JavaScript动态控制 */
 
 #term_header{
     height:20px;
@@ -88,7 +94,7 @@
     display: flex;
     flex: 1;
     background: #000000;
-    overflow: auto;
+    overflow: hidden;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important; 
 }

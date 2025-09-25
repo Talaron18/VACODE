@@ -8,9 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "WEIJUN HONG, SHUAIYU DING",
+  "license": "MIT",
+  "description": "Summer Project by WEIJUN HONG, SHUAIYU DING, 2025",
   "devDependencies": {
     "css-loader": "^7.1.2",
     "electron": "^37.3.1",

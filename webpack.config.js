@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const common={
-    mode:'development',
+    mode:'production',
     resolve:{
         extensions:['.ts','.mts','.mjs','.js']
     },

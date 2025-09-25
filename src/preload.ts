@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld('menuAPI', {
     listDirectory: (folderPath: string) => ipcRenderer.invoke('list-directory', folderPath),
     openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
     openFolderDialog: () => ipcRenderer.invoke('open-folder-dialog'),
+    saveFileDialog: (currentFilePath?: string) => ipcRenderer.invoke('save-file-dialog', currentFilePath),
     createNewWindow: () => ipcRenderer.invoke('create-new-window'),
     closeWindow: () => ipcRenderer.invoke('close-window'),
     getFileType: (filePath: string) => ipcRenderer.invoke('get-file-type', filePath),

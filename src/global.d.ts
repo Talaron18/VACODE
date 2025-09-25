@@ -9,9 +9,9 @@ declare global {
       onData: (callback: (data: string) => void) => void;
       getCwd: () => string;
     };
-    editorAPI:{
-      readFile:(filePath:string)=>Promise<string>;
-      writeFile:(filePath:string,content:string)=>Promise<void>;
+    editorAPI: {
+      readFile: (filePath: string) => Promise<string>;
+      writeFile: (filePath: string, content: string) => Promise<void>;
     };
   }
 

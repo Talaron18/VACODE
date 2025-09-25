@@ -33,19 +33,20 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createWindow = void 0;
 const path = __importStar(require("path"));
 const electron_1 = require("electron");
 const os = __importStar(require("os"));
 const pty = __importStar(require("node-pty"));
 const ipc_handlers_1 = require("./ipc-handlers");
-let ptyProcess = null;
+let ptyProcesses = new Map();
 let win = null;
 let currentFile = null;
 const shell = os.platform() === "win32"
     ? "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
     : process.env.SHELL || "bash";
 const createWindow = () => {
-    win = new electron_1.BrowserWindow({
+    const newWin = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
         minWidth: 400,
@@ -64,47 +65,77 @@ const createWindow = () => {
             height: 35
         }
     });
-    win.loadFile(path.join(__dirname, "../index.html"));
-    win.on('closed', () => {
-        if (ptyProcess) {
-            ptyProcess.kill();
-            ptyProcess = null;
+    newWin.loadFile(path.join(__dirname, "../index.html"));
+    newWin.on('closed', () => {
+        try {
+            if (!newWin.isDestroyed()) {
+                const windowId = newWin.webContents.id;
+                const ptyProcess = ptyProcesses.get(windowId);
+                if (ptyProcess) {
+                    ptyProcess.kill();
+                    ptyProcesses.delete(windowId);
+                }
+            }
         }
-        win = null;
-        electron_1.app.quit();
+        catch (error) {
+            console.warn('Error cleaning up window resources:', error);
+        }
+        if (win === newWin) {
+            win = null;
+        }
     });
+    if (!win) {
+        win = newWin;
+    }
+    return newWin;
 };
+exports.createWindow = createWindow;
 electron_1.app.whenReady().then(() => {
-    createWindow();
+    (0, exports.createWindow)();
     electron_1.app.on('activate', () => {
         if (electron_1.BrowserWindow.getAllWindows().length === 0)
-            createWindow();
+            (0, exports.createWindow)();
     });
 });
 let ipcHandlers;
 ipcHandlers = new ipc_handlers_1.IpcHandlers();
 const ptyEnv = { ...process.env };
-ptyEnv.Path = ptyEnv.Path + ";C:\\mingw64\\bin";
+ptyEnv.Path = (ptyEnv.Path || '') + ";C:\\mingw64\\bin";
 electron_1.ipcMain.on('terminal.create', (event, cols, rows) => {
-    ptyProcess = pty.spawn(shell, ["-NoExit", "-Command", "$env:PATH='" + ptyEnv.Path + "'"], {
+    const windowId = event.sender.id;
+    const ptyProcess = pty.spawn(shell, ["-NoExit", "-Command", "$env:PATH='" + ptyEnv.Path + "'"], {
         name: 'xterm-color',
         cols: cols,
         rows: rows,
         cwd: os.homedir(),
         env: ptyEnv,
     });
-    ptyProcess?.onData((data) => {
+    ptyProcesses.set(windowId, ptyProcess);
+    const onData = (data) => {
         if (win && !win.isDestroyed()) {
             event.sender.send('terminal.data', data);
         }
-    });
+    };
+    const dispose = ptyProcess.onData(onData);
+    const window = electron_1.BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+        window.on('close', () => {
+            dispose.dispose();
+            ptyProcess.kill();
+            ptyProcesses.delete(windowId);
+        });
+    }
 });
-electron_1.ipcMain.on('terminal.toPty', (_event, input) => {
+electron_1.ipcMain.on('terminal.toPty', (event, input) => {
+    const windowId = event.sender.id;
+    const ptyProcess = ptyProcesses.get(windowId);
     if (ptyProcess) {
         ptyProcess.write(input);
     }
 });
-electron_1.ipcMain.on('terminal.resize', (_event, cols, rows) => {
+electron_1.ipcMain.on('terminal.resize', (event, cols, rows) => {
+    const windowId = event.sender.id;
+    const ptyProcess = ptyProcesses.get(windowId);
     if (ptyProcess) {
         ptyProcess.resize(cols, rows);
     }
@@ -115,6 +146,10 @@ electron_1.app.on('window-all-closed', () => {
     }
 });
 electron_1.app.on('before-quit', () => {
+    ptyProcesses.forEach((ptyProcess) => {
+        ptyProcess.kill();
+    });
+    ptyProcesses.clear();
     if (ipcHandlers) {
         ipcHandlers.removeHandlers();
     }

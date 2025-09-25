@@ -3,7 +3,6 @@ import { FileOperations } from './file-operations';
 import { ProjectManager } from './project-manager';
 import { AIService } from './ai-service';
 
-// IPC 处理器模块 - 负责处理主进程与渲染进程之间的通信
 export class IpcHandlers {
     private fileOperations: FileOperations;
     private projectManager: ProjectManager;
@@ -16,9 +15,7 @@ export class IpcHandlers {
         this.registerHandlers();
     }
 
-    // 注册所有 IPC 处理器
     private registerHandlers(): void {
-        // 文件操作处理器
         ipcMain.handle('create-file', async (_event: any, fileName: string, targetDir?: string): Promise<string> => {
             return this.fileOperations.createFile(fileName, targetDir);
         });
@@ -27,7 +24,6 @@ export class IpcHandlers {
             return this.fileOperations.createFolder(folderName, targetDir);
         });
 
-        // 项目管理处理器
         ipcMain.handle('get-project-root', async (): Promise<string> => {
             return this.projectManager.getBaseProjectDir();
         });
@@ -40,13 +36,11 @@ export class IpcHandlers {
             return this.fileOperations.listDirectory(dirPath);
         });
 
-        // 获取单个文件的类型信息
         ipcMain.handle('get-file-type', async (_event: any, filePath: string): Promise<any> => {
             const { FileTypeUtils } = require('./file-type-utils');
             return FileTypeUtils.getFileType(filePath);
         });
 
-        // 对话框处理器
         ipcMain.handle('open-file-dialog', async (): Promise<string[] | null> => {
             const res = await dialog.showOpenDialog({
                 properties: ['openFile']
@@ -61,7 +55,28 @@ export class IpcHandlers {
             return res.canceled ? null : res.filePaths;
         });
 
-        // 文件读写处理器
+        ipcMain.handle('save-file-dialog', async (_event: any, currentFilePath?: string): Promise<string | null> => {
+            
+            const res = await dialog.showSaveDialog({
+                properties: ['createDirectory'],
+                defaultPath: currentFilePath ? currentFilePath.replace(/\\/g, '/') : undefined,
+                filters: [
+                    { name: 'All Files', extensions: ['*'] },
+                    { name: 'C Files', extensions: ['c'] },
+                    { name: 'C++ Files', extensions: ['cpp', 'cc', 'cxx'] },
+                    { name: 'JavaScript', extensions: ['js'] },
+                    { name: 'TypeScript', extensions: ['ts'] },
+                    { name: 'Python', extensions: ['py'] },
+                    { name: 'HTML', extensions: ['html', 'htm'] },
+                    { name: 'CSS', extensions: ['css'] },
+                    { name: 'JSON', extensions: ['json'] },
+                    { name: 'Markdown', extensions: ['md'] },
+                    { name: 'Text Files', extensions: ['txt'] }
+                ]
+            });
+            return res.canceled ? null : res.filePath || null;
+        });
+
         ipcMain.handle('read-file', async (_event: any, filePath: string): Promise<string> => {
             return this.fileOperations.readFile(filePath);
         });
@@ -70,17 +85,14 @@ export class IpcHandlers {
             this.fileOperations.writeFile(filePath, content);
         });
 
-        // 文件存在性检查处理器
         ipcMain.handle('file-exists', async (_event: any, filePath: string): Promise<boolean> => {
             return this.fileOperations.exists(filePath);
         });
 
-        // AI聊天处理器
         ipcMain.handle('ai-chat', async (_event: any, message: string, chatHistory: any[] = []): Promise<string> => {
             return this.aiService.chat(message, chatHistory);
         });
 
-        // AI流式聊天处理器
         ipcMain.handle('ai-chat-stream', async (event: any, messageId: string, message: string, chatHistory: any[] = []): Promise<void> => {
             try {
                 for await (const chunk of this.aiService.chatStream(message, chatHistory)) {
@@ -93,32 +105,28 @@ export class IpcHandlers {
             }
         });
 
-        // 显示输入对话框处理器
         ipcMain.handle('show-prompt', async (_event: any, title: string, message: string): Promise<string | null> => {
             const { dialog } = require('electron');
             const result = await dialog.showMessageBox({
                 type: 'question',
-                buttons: ['确定', '取消'],
+                buttons: ['OK', 'Cancel'],
                 defaultId: 0,
                 title: title,
                 message: message,
-                detail: '请输入你的问题'
+                detail: 'Please enter your question'
             });
             
             if (result.response === 0) {
-                // 用户点击了确定，返回一个简单的输入
-                return '你好，请介绍一下你自己';
+                return 'Hello, please introduce yourself';
             }
             return null;
         });
 
-        // 创建新窗口处理器
         ipcMain.handle('create-new-window', async (): Promise<void> => {
-            // 创建新窗口功能已移除
-            console.log('Create new window functionality removed');
+            const { createWindow } = require('./main');
+            createWindow();
         });
 
-        // 关闭窗口处理器
         ipcMain.handle('close-window', async (event: any): Promise<void> => {
             const window = BrowserWindow.fromWebContents(event.sender);
             if (window) {
@@ -127,7 +135,6 @@ export class IpcHandlers {
         });
     }
 
-    // 移除所有 IPC 处理器
     public removeHandlers(): void {
         const handlers = [
             'create-file',
@@ -138,6 +145,7 @@ export class IpcHandlers {
             'get-file-type',
             'open-file-dialog',
             'open-folder-dialog',
+            'save-file-dialog',
             'read-file',
             'write-file',
             'file-exists',

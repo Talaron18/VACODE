@@ -38,12 +38,10 @@ const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const project_manager_1 = require("./project-manager");
 const file_type_utils_1 = require("./file-type-utils");
-// 文件操作类 - 负责处理文件和文件夹的创建、读取、写入等操作
 class FileOperations {
     constructor() {
         this.projectManager = new project_manager_1.ProjectManager();
     }
-    // 创建文件
     async createFile(fileName, targetDir) {
         const safeName = String(fileName || '').trim();
         if (!safeName) {
@@ -65,7 +63,6 @@ class FileOperations {
         fs.writeFileSync(target, '');
         return target;
     }
-    // 创建文件夹
     async createFolder(folderName, targetDir) {
         const safeName = String(folderName || '').trim();
         if (!safeName) {
@@ -83,7 +80,6 @@ class FileOperations {
         fs.mkdirSync(finalPath, { recursive: true });
         return finalPath;
     }
-    // 列出目录内容
     async listDirectory(dirPath) {
         const safePath = String(dirPath || '').trim();
         if (!safePath) {
@@ -98,7 +94,6 @@ class FileOperations {
                     type: e.isDirectory() ? 'dir' : 'file',
                     path: itemPath
                 };
-                // 如果是文件，添加文件类型信息
                 if (!e.isDirectory()) {
                     result.fileType = file_type_utils_1.FileTypeUtils.getFileType(itemPath);
                 }
