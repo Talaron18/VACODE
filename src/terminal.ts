@@ -65,12 +65,12 @@ export function createTerminal(container: HTMLElement){
                 
                 //term_container.style.left = marginValue + 'px';
                 term_container.style.width = `calc(100% - ${marginValue}px)`;
-                edit_window.style.width = `calc(100% - ${marginValue}px)`;
+                edit_window.style.width = `calc(100% - ${marginValue}px + 15px)`;
             } else {
                 // 默认位置
                 //term_container.style.left = '60px';
                 term_container.style.width = 'calc(100% - 45px)';
-                edit_window.style.width = 'calc(100% - 45px)';
+                edit_window.style.width = 'calc(100% - 65px)';
             }
             // 立即调整终端尺寸，无延迟
             resizeTerminal();
@@ -99,7 +99,7 @@ export function createTerminal(container: HTMLElement){
         term_container.style.height = newHeight + "px";
         let terminalHeight=term_container.style.height;
         let terminalHeightValue=parseInt(terminalHeight);
-        edit_window.style.height=`calc(93% - ${terminalHeightValue}px)`;
+        edit_window.style.height=`calc(90% - ${terminalHeightValue}px)`;
     });
 
     window.addEventListener("mouseup", () => {
@@ -124,10 +124,11 @@ export function createTerminal(container: HTMLElement){
 
     toggleBtn.addEventListener("click", () => {
         if(isVisible){
-            term_container.style.height = '20px';
-            edit_window.style.height = '100%';
+            term_container.style.display = 'none';
+            edit_window.style.height='100%'
         }else{
-            term_container.style.height = '43%';
+            term_container.style.display = 'flex';
+            edit_window.style.height='55%';
             resizeTerminal();
         }
         isVisible = !isVisible;

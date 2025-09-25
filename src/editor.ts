@@ -11,16 +11,17 @@ export async function openInEditor(container: HTMLElement,fileDir:string) {
     }else if(type === "ts"){
         type="typescript";
     }
-    console.log(type);
 
     const editorHead= document.createElement("div");
     editorHead.style.position='relative';
     editorHead.style.display='flex';
     editorHead.style.width='100%';
+    editorHead.id='editor-head';
     editorHead.style.backgroundColor='#212121ff';
     container.appendChild(editorHead);
 
     const editorHeadTitle= document.createElement("span");
+    editorHeadTitle.id='editor-head-title';
     editorHeadTitle.style.position='relative';
     editorHeadTitle.style.background='none';
     editorHeadTitle.style.color='#fff';
@@ -30,6 +31,7 @@ export async function openInEditor(container: HTMLElement,fileDir:string) {
     editorHead.appendChild(editorHeadTitle);
 
     const closeBtn=document.createElement('span');
+    closeBtn.id='editor-close-btn';
     closeBtn.style.visibility='hidden';
     closeBtn.style.position='relative';
     closeBtn.style.background='none';
@@ -52,7 +54,7 @@ export async function openInEditor(container: HTMLElement,fileDir:string) {
         }else{
             container.removeChild(editorContainer);
             container.removeChild(editorHead);
-        }
+        };
     });
     const code = await window.editorAPI.readFile(fileDir);
     const editorContainer = document.createElement("div");
@@ -60,7 +62,7 @@ export async function openInEditor(container: HTMLElement,fileDir:string) {
     editorContainer.style.width = "100%";
     editorContainer.style.height = "100%";
     editorContainer.style.position = "relative";
-    editorContainer.id = filename;
+    editorContainer.id = 'monaco-editor-container';
     container.appendChild(editorContainer);
 
     const editor = monaco.editor.create(editorContainer, {
@@ -87,8 +89,8 @@ export async function openInEditor(container: HTMLElement,fileDir:string) {
             saved = true;
         }
     );
-
-    return editor;
+    
+    return saved;
 };
 
 

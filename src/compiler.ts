@@ -4,6 +4,7 @@ export function compileAndRun(fileDir: string){
     const directory = fileDir.slice(0, -filename.length);
     console.log(filename,extension,directory);
     loadExtention(extension);
+    fileDir='';
 
     function loadExtention(extension: string){
         if (extension === 'c'){
