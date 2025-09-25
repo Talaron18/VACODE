@@ -63,10 +63,7 @@
     box-sizing: border-box;
     min-height: 100px;
     max-height: 80%;
-    /* 宽度、左边距和右边距由JavaScript动态控制 */
 }
-
-/* 终端宽度现在由JavaScript动态控制 */
 
 #term_header{
     height:20px;
