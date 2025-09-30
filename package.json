@@ -6,7 +6,11 @@
     "start": "npm run build && electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist-win": "npm run build && electron-builder --win",
+    "package": "npm run build && electron-packager . VACode --platform=win32 --arch=x64 --out=pack --overwrite --icon=static/media/icon.png"
   },
   "author": "WEIJUN HONG, SHUAIYU DING",
   "license": "MIT",
@@ -14,6 +18,8 @@
   "devDependencies": {
     "css-loader": "^7.1.2",
     "electron": "^37.3.1",
+    "electron-builder": "^25.1.8",
+    "electron-packager": "^17.1.2",
     "electron-rebuild": "^3.2.9",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
@@ -28,5 +34,47 @@
     "monaco-editor-webpack-plugin": "^7.1.0",
     "node-pty": "^1.1.0-beta33",
     "openai": "^5.20.3"
+  },
+  "build": {
+    "appId": "com.viennaAcademic.vacode",
+    "productName": "VACODE",
+    "directories": {
+      "output": "pack",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "index.html",
+      "instruction.html",
+      "static/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "static/media/vacode.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "VACode",
+      "createStartMenuShortcut": true,
+      "allowElevation": true,
+      "runAfterFinish": true
+    },
+    "buildDependenciesFromSource": false,
+    "nodeGypRebuild": false,
+    "npmRebuild": false,
+    "asarUnpack": [
+      "node_modules/node-pty/**/*"
+    ],
+    "electronVersion": "37.3.1",
+    "forceCodeSigning": false
   }
 }

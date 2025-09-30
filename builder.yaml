@@ -1,0 +1,31 @@
+directories:
+  output: pack
+  buildResources: build
+appId: com.viennaAcademic.vacode
+productName: VACODE
+files:
+  - "dist/**/*"
+  - "index.html"
+  - "instruction.html"
+  - "static/**/*"
+win:
+  target:
+    - target: nsis
+      icon: "static/media/vacode.ico"
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: VACode
+  allowElevation: true
+  runAfterFinish: true
+buildDependenciesFromSource: false
+nodeGypRebuild: false
+npmRebuild: false
+asarUnpack:
+  - node_modules/node-pty/**/*
+electronVersion: 37.3.1
+shortcutName: VACode

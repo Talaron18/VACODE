@@ -142,9 +142,6 @@ export function createTerminal(container: HTMLElement){
         if(event.ctrlKey && event.key === 'c'){
             handleCtrlC(term);
             return false;
-        }else if(event.ctrlKey && event.key === 'v'){
-            handleCtrlV(term);
-            return false;
         }
         return true;
     });
